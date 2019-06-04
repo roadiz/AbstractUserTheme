@@ -27,6 +27,12 @@ themeDeleteUser:
         _controller: Themes\AbstractUserTheme\Controllers\DeleteAccountController::deleteAction
         _locale: en
 
+themeDownloadUser:
+    path:     /download
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\DownloadAccountController::downloadAction
+        _locale: en
+
 themeChangePasswordUser:
     path:     /change-password
     defaults:

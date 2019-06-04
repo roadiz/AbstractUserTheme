@@ -4,6 +4,17 @@
 
 **Middleware theme for creating public User accounts and user actions.**
 
+## Features
+
+- Sign-up
+- Sign-in
+- Account validation by email
+- Account validation by SMS (requires MessageBird API access-token)
+- Password change
+- *Forgot my password* (password change with a token sent to user email)
+- GDPR compliance
+    - User deletion
+    - User data download (JSON serialization)
 
 ## Usage
 

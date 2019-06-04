@@ -1,0 +1,28 @@
+{% extends "pages/base.html.twig" %}
+
+
+{% block inner_content %}
+    <div class="container">
+        {% form_theme user_form 'account/forms.html.twig' %}
+        {{ form_start(user_form) }}
+        {{ form_widget(user_form) }}
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">
+                <span class="label"><span class="label-text">{% trans %}user_data_download.user_button{% endtrans %}</span></span>
+            </button>
+        </div>
+        {{ form_end(user_form) }}
+
+        {% form_theme logs_form 'account/forms.html.twig' %}
+        {{ form_start(logs_form) }}
+        {{ form_widget(logs_form) }}
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">
+                <span class="label"><span class="label-text">{% trans %}user_data_download.logs_button{% endtrans %}</span></span>
+            </button>
+        </div>
+        {{ form_end(logs_form) }}
+
+        <p><a class="btn btn-outline-dark" href="{{ path('themeAccount', {_locale: request.locale}) }}">{% trans %}user.back_to_account{% endtrans %}</a></p>
+    </div>
+{% endblock %}

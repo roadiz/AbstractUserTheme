@@ -3,13 +3,15 @@
 
 {% block inner_content %}
     <div class="container">
+        <p class="text-danger">{% trans %}user.delete.question{% endtrans %}</p>
         {% form_theme form 'account/forms.html.twig' %}
         {{ form_start(form) }}
         {{ form_widget(form) }}
         <div class="form-group">
-            <button class="btn btn-primary" type="submit">
-                <span class="label"><span class="label-text">{% trans %}user.sign_up.button{% endtrans %}</span></span>
+            <button class="btn btn-danger" type="submit">
+                <span class="label"><span class="label-text">{% trans %}user.delete.button{% endtrans %}</span></span>
             </button>
+            <a class="btn btn-outline-dark" href="{{ path('themeAccount', {_locale: request.locale}) }}">{% trans %}user.back_to_account{% endtrans %}</a>
         </div>
         {{ form_end(form) }}
     </div>

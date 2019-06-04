@@ -16,7 +16,7 @@ class ValidationToken extends AbstractEntity
     /**
      * @var User|null
      * @ORM\OneToOne(targetEntity="RZ\Roadiz\Core\Entities\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $user = null;
 

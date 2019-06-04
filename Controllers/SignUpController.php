@@ -68,8 +68,7 @@ class SignUpController extends AbstractUserThemeApp
             $msg = $this->getTranslator()->trans('user.%name%.created_an_account', [
                 '%name%' => $user->getEmail(),
             ]);
-            $this->get('logger')->info($msg);
-
+            $this->publishConfirmMessage($request, $msg);
             /*
              * Connect User right after a successful register.
              */
@@ -89,6 +88,7 @@ class SignUpController extends AbstractUserThemeApp
 
         return $this->render($this->getTemplatePath(), $this->assignation);
     }
+
     /**
      * @return bool
      */

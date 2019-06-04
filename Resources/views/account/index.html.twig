@@ -22,7 +22,9 @@
                 <hr>
                 <p><a class="btn btn-outline-dark" href="{{ path('themeChangePasswordUser', {_locale: request.locale}) }}">{% trans %}user.change_password{% endtrans %}</a></p>
                 <hr>
-                <p class="text-danger">{% trans %}user.delete_description{% endtrans %}</p>
+                <p><a class="btn btn-outline-warning" href="{{ path('themeDownloadUser', {_locale: request.locale}) }}">{% trans %}user_data_download{% endtrans %}</a></p>
+                <hr>
+                <p class="text-danger">{% trans %}user.delete.description{% endtrans %}</p>
                 <p><a class="btn btn-outline-danger" href="{{ path('themeDeleteUser', {_locale: request.locale}) }}">{% trans %}user.delete{% endtrans %}</a></p>
             </div>
         </div>
