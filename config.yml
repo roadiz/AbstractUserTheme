@@ -1,0 +1,17 @@
+---
+name: "Abstract User theme"
+author: "Rezo Zero"
+copyright: "Rezo Zero"
+themeDir: "AbstractUserTheme"
+supportedLocale:
+    - "en"
+    - "fr"
+versionRequire: "1.1.0"
+importFiles:
+    roles: []
+    groups: []
+    settings:
+        - Resources/imports/settings-apis.json
+    nodetypes: []
+    tags: []
+    nodes: []

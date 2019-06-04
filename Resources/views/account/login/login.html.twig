@@ -1,0 +1,31 @@
+{% extends "pages/base.html.twig" %}
+
+
+{% block inner_content %}
+    <div class="container">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.message|trans }}</div>
+        {% endif %}
+        <form id="login-form" class="form" action="{{ path('themeLoginCheck') }}" method="post">
+            {% if _target_path %}
+                <input type="hidden" name="_target_path" id="_target_path" value="{{ _target_path }}" />
+            {% endif %}
+            <div class="form-group">
+                <label class="control-label required" for="_username">{% trans %}email{% endtrans %}</label>
+                <input class="form-control" required="required" type="text" name="_username" id="_username" value="" />
+            </div>
+            <div class="form-group">
+                <label class="control-label required" for="_password">{% trans %}password{% endtrans %}</label>
+                <input class="form-control" required="required" type="password" name="_password" id="_password" value="" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="_remember_me">{% trans %}keep_me_logged_in{% endtrans %}</label>
+                <input class="form-control" type="checkbox" name="_remember_me" id="_remember_me" value="1" />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">{% trans %}login{% endtrans %}</button>
+                <p><a href="{{ path('themeForgotPassword', {_locale: request.locale}) }}">{% trans %}forgot_my_password{% endtrans %}</a></p>
+            </div>
+        </form>
+    </div>
+{% endblock %}

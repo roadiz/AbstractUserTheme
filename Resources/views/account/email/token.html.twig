@@ -1,0 +1,32 @@
+{% extends 'base_email.html.twig' %}
+
+{% block title %}<title>{{ 'user_verify.email.subject'|trans }}</title>{% endblock %}
+{% block content_table %}
+    <table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction">
+        <tr>
+            <td class="content-wrap">
+                <meta itemprop="name" content="Confirm Email"/>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td class="content-block">
+                            <h2>{{ 'user_verify.email.subject'|trans }}</h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content-block"><p>{{ 'user_verify.email.validate_message'|trans }}</p></td>
+                    </tr>
+                    <tr>
+                        <td class="invoice">
+                            <table class="invoice-items">
+                                <tr class="">
+                                    <td class="content-block">{{ 'user_verify.your_validation_token'|trans }}</td>
+                                    <td class="content-block"><code>{{ validationToken.validationToken }}</code></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

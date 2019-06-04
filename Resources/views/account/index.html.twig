@@ -1,0 +1,16 @@
+{% extends "pages/base.html.twig" %}
+
+
+{% block inner_content %}
+    <div class="container">
+        <h1 class="page-title">{{ user.email }}</h1>
+
+        {% if validationToken and validationToken.isValidated %}
+            <p><i class="fa fa-check"></i> {% trans %}user.is_validated{% endtrans %}</p>
+        {% else %}
+            <p class="text-danger"><i class="fa fa-error"></i> {% trans %}user.is_not_validated{% endtrans %}</p>
+            <p><a href="{{ path('themeVerifyUser', {_locale: request.locale}) }}">{% trans %}user_verify.page_title{% endtrans %}</a></p>
+        {% endif %}
+        <p><a href="{{ path('themeLogout', {_locale: request.locale}) }}">{% trans %}user.logout{% endtrans %}</a></p>
+    </div>
+{% endblock %}

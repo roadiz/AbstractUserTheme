@@ -1,0 +1,72 @@
+#
+# Account related actions
+# but without firewall
+#
+themeForgotPassword:
+    path:     /{_locale}/password/request
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\LoginRequestController::requestAction
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+
+themeWaitPassword:
+    path:     /{_locale}/password/request/sent
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\LoginRequestController::confirmAction
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+
+themeResetPassword:
+    path:     /{_locale}/password/reset/{token}
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\LoginResetController::resetAction
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+        token: "[a-z0-9_\\-A-Z]+"
+
+themeConfirmPassword:
+    path:     /{_locale}/password/confirm
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\LoginResetController::confirmAction
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+
+
+themeSignInUser:
+    path:     /{_locale}/sign-in
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\LoginController::loginAction
+        _locale: en
+
+themeSignUpUser:
+    path:     /{_locale}/sign-up
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\SignUpController::signUpAction
+        _locale: en
+
+themeDeleteSuccessUser:
+    path:     /{_locale}/delete-account/success
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\DeleteAccountController::confirmAction
+        _locale: en
+
+themeAccount:
+    path: /{_locale}/account
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\AccountController::accountAction
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+
+accounts_routes:
+    resource: routing/accounts.yml
+    prefix: /{_locale}/account
+    defaults:
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+
