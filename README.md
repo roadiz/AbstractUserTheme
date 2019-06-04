@@ -44,3 +44,9 @@ class MyAwesomeThemeApp extends AbstractUserThemeApp {
 
 - **Do not** directly register `AbstractUserTheme` in your `app/conf/config.yml` file, all services will be wired up using inheritance.
 - Add a `additional_scripts` Twig block in your main theme template to be able to inject some JS dependencies.
+- Import AbstractUserTheme routes into your theme’s
+```yaml
+# Resources/routes.yml
+abstract_user_theme_routes:
+    resource: abstract_routes.yml
+```

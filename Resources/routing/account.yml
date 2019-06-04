@@ -30,7 +30,7 @@ themeDeleteUser:
 themeChangePasswordUser:
     path:     /change-password
     defaults:
-        _controller: Themes\AbstractUserTheme\Controllers\PasswordController::changeAction
+        _controller: Themes\AbstractUserTheme\Controllers\ChangePasswordController::changeAction
         _locale: en
     requirements:
         _locale: "[a-z]{2}"
@@ -38,7 +38,7 @@ themeChangePasswordUser:
 themeConfirmChangePassword:
     path:     /change-password/confirm
     defaults:
-        _controller: Themes\AbstractUserTheme\Controllers\PasswordController::confirmChangeAction
+        _controller: Themes\AbstractUserTheme\Controllers\ChangePasswordController::confirmChangeAction
         _locale: en
     requirements:
         _locale: "[a-z]{2}"

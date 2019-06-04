@@ -39,7 +39,7 @@ class VerifyAccountController extends AbstractUserThemeApp
         ];
 
         $user = $this->getUser();
-        if (null === $user || !$this->isGranted(static::$firewallRole) || !($user instanceof User)) {
+        if (!($user instanceof User)) {
             throw $this->createAccessDeniedException();
         }
 

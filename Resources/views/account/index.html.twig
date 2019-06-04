@@ -5,12 +5,26 @@
     <div class="container">
         <h1 class="page-title">{{ user.email }}</h1>
 
-        {% if validationToken and validationToken.isValidated %}
-            <p><i class="fa fa-check"></i> {% trans %}user.is_validated{% endtrans %}</p>
-        {% else %}
-            <p class="text-danger"><i class="fa fa-error"></i> {% trans %}user.is_not_validated{% endtrans %}</p>
-            <p><a href="{{ path('themeVerifyUser', {_locale: request.locale}) }}">{% trans %}user_verify.page_title{% endtrans %}</a></p>
-        {% endif %}
-        <p><a href="{{ path('themeLogout', {_locale: request.locale}) }}">{% trans %}user.logout{% endtrans %}</a></p>
+        <div class="card">
+            <div class="card-body">
+                {% if validationToken and validationToken.isValidated %}
+                    <p class="card-title"><i class="fa fa-check"></i> {% trans %}user.is_validated{% endtrans %}</p>
+                {% else %}
+                    <p class="card-title text-danger"><i class="fa fa-error"></i> {% trans %}user.is_not_validated{% endtrans %}</p>
+                    <p><a class="btn btn-outline-primary" href="{{ path('themeVerifyUser', {_locale: request.locale}) }}">{% trans %}user_verify.page_title{% endtrans %}</a></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <p><a class="btn btn-outline-dark" href="{{ path('themeLogout', {_locale: request.locale}) }}">{% trans %}user.logout{% endtrans %}</a></p>
+                <hr>
+                <p><a class="btn btn-outline-dark" href="{{ path('themeChangePasswordUser', {_locale: request.locale}) }}">{% trans %}user.change_password{% endtrans %}</a></p>
+                <hr>
+                <p class="text-danger">{% trans %}user.delete_description{% endtrans %}</p>
+                <p><a class="btn btn-outline-danger" href="{{ path('themeDeleteUser', {_locale: request.locale}) }}">{% trans %}user.delete{% endtrans %}</a></p>
+            </div>
+        </div>
     </div>
 {% endblock %}

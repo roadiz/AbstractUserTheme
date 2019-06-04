@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Themes\AbstractUserTheme\AbstractUserThemeApp;
 
 class LoginController extends AbstractUserThemeApp
@@ -12,7 +13,7 @@ class LoginController extends AbstractUserThemeApp
      * @param Request $request
      * @param string  $_locale
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      * @throws \Twig_Error_Runtime
      */
     public function loginAction(Request $request, $_locale = 'en')
@@ -26,14 +27,6 @@ class LoginController extends AbstractUserThemeApp
         $this->assignation['pageMeta'] = [
             'title' => $this->get('translator')->trans('user.sign_in.page_title') . ' — ' . $this->get('settingsBag')->get('site_name'),
         ];
-
-        if ($request->query->has('_target_path') &&
-            1 === preg_match('#^\/#', $request->query->get('_target_path'))) {
-            $this->assignation['_target_path'] = $request->query->get('_target_path');
-        } else {
-            $this->assignation['_target_path'] = $this->generateUrl('themeAccount', ['_locale' => $_locale]);
-        }
-
         return $this->render($this->getTemplatePath(), $this->assignation);
     }
 

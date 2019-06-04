@@ -41,7 +41,8 @@ class LoginRequestController extends AbstractUserThemeApp
                 $form,
                 $this->get('em'),
                 $this->get('logger'),
-                $this->get('urlGenerator')
+                $this->get('urlGenerator'),
+                'themeResetPassword'
             )) {
                 return $this->redirect($this->getRedirectedUrl($_locale));
             }
@@ -64,11 +65,16 @@ class LoginRequestController extends AbstractUserThemeApp
     }
 
     /**
+     * @param Request $request
+     * @param string  $_locale
+     *
      * @return Response
      * @throws \Twig_Error_Runtime
      */
-    public function confirmAction()
+    public function confirmAction(Request $request, $_locale = "en")
     {
+        $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
+
         return $this->render($this->getConfirmTemplatePath(), $this->assignation);
     }
 
