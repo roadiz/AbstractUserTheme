@@ -51,7 +51,6 @@ class DeleteAccountController extends AbstractUserThemeApp
                 '%name%' => $user->getEmail(),
             ]);
             $this->get('logger')->info($msg);
-
             $this->get('em')->remove($user);
             $this->get('em')->flush();
             $this->get('securityTokenStorage')->setToken(null);

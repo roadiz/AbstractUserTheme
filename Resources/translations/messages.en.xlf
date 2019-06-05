@@ -74,6 +74,14 @@
         <source>user_verify.button</source>
         <target xml:lang="en" state="translated">Send a validation code</target>
       </trans-unit>
+      <trans-unit id="user_verify.by_email.button" xml:space="preserve">
+        <source>user_verify.by_email.button</source>
+        <target xml:lang="en" state="translated">Send me a validation code by email</target>
+      </trans-unit>
+      <trans-unit id="user_verify.by_sms.button" xml:space="preserve">
+        <source>user_verify.by_sms.button</source>
+        <target xml:lang="en" state="translated">Send me a validation code by SMS</target>
+      </trans-unit>
       <trans-unit id="user_verify.cant_get_country_code_from_phone" xml:space="preserve">
         <source>user_verify.cant_get_country_code_from_phone</source>
         <target xml:lang="en" state="translated">Impossible to send a validation code to this country by phone.</target>
@@ -134,6 +142,10 @@
         <source>user.%name%.deleted_his_account</source>
         <target xml:lang="en" state="translated">%name% just deleted its user account.</target>
       </trans-unit>
+      <trans-unit id="user._name_.updated_its_account" xml:space="preserve">
+        <source>user.%name%.updated_its_account</source>
+        <target xml:lang="en" state="translated">%name% just updated its public user account.</target>
+      </trans-unit>
       <trans-unit id="user.back_to_account" xml:space="preserve">
         <source>user.back_to_account</source>
         <target xml:lang="en" state="translated">Back to my account</target>
@@ -166,6 +178,10 @@
         <source>user.email</source>
         <target xml:lang="en" state="translated">Email address</target>
       </trans-unit>
+      <trans-unit id="user.firstName" xml:space="preserve">
+        <source>user.firstName</source>
+        <target xml:lang="en" state="translated">First name</target>
+      </trans-unit>
       <trans-unit id="user.is_not_validated" xml:space="preserve">
         <source>user.is_not_validated</source>
         <target xml:lang="en" state="translated">Account is not validated yet.</target>
@@ -173,6 +189,10 @@
       <trans-unit id="user.is_validated" xml:space="preserve">
         <source>user.is_validated</source>
         <target xml:lang="en" state="translated">Account validated.</target>
+      </trans-unit>
+      <trans-unit id="user.lastName" xml:space="preserve">
+        <source>user.lastName</source>
+        <target xml:lang="en" state="translated">Last name</target>
       </trans-unit>
       <trans-unit id="user.logout" xml:space="preserve">
         <source>user.logout</source>
@@ -189,6 +209,10 @@
       <trans-unit id="user.sign_up.page_title" xml:space="preserve">
         <source>user.sign_up.page_title</source>
         <target xml:lang="en" state="translated">Create an account</target>
+      </trans-unit>
+      <trans-unit id="user.update.button" xml:space="preserve">
+        <source>user.update.button</source>
+        <target xml:lang="en" state="translated">Update account information</target>
       </trans-unit>
     </body>
   </file>

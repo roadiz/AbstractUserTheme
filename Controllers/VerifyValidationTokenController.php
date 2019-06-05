@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Controllers;
 
 use RZ\Roadiz\Core\Entities\User;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Themes\AbstractUserTheme\AbstractUserThemeApp;
+use Themes\AbstractUserTheme\Event\FilterUserEvent;
+use Themes\AbstractUserTheme\Event\UserEvents;
 use Themes\AbstractUserTheme\Form\VerifyTokenType;
 
 class VerifyValidationTokenController extends AbstractUserThemeApp
@@ -56,6 +59,11 @@ class VerifyValidationTokenController extends AbstractUserThemeApp
                 $validationToken->setValidationToken(null);
                 $validationToken->setValidationTokenExpiresAt(null);
                 $this->get('em')->flush();
+
+                $event = new FilterUserEvent($user, $this->get('em'), $this->get('securityTokenStorage'));
+                /** @var EventDispatcherInterface $eventDispatcher */
+                $eventDispatcher = $this->get('dispatcher');
+                $eventDispatcher->dispatch(UserEvents::USER_VALIDATED, $event);
 
                 return $this->redirect($this->getAccountRedirectedUrl($_locale));
             } else {

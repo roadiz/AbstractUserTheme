@@ -10,6 +10,7 @@ use MessageBird\Client;
 use MessageBird\Objects\Message;
 use RZ\Roadiz\Core\Entities\User;
 use RZ\Roadiz\Utils\EmailManager;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -49,43 +50,52 @@ class VerifyAccountController extends AbstractUserThemeApp
             return $this->redirect($this->getAccountRedirectedUrl($_locale));
         }
 
-        /** @var Form $verifyForm */
-        $verifyForm = $this->createForm(UserVerifyType::class);
+        if ($this->useSmsValidationMethod()) {
+            /** @var Form $verifyForm */
+            $verifyForm = $this->createForm(UserVerifyType::class);
+            $this->assignation['sms_verification'] = true;
+        } else {
+            /** @var Form $verifyForm */
+            $verifyForm = $this->createForm(FormType::class);
+            $this->assignation['email_verification'] = true;
+        }
         $verifyForm->handleRequest($request);
 
         if ($verifyForm->isValid()) {
             if (null === $validationToken) {
                 $validationToken = new ValidationToken($user);
-                /** @var PhoneNumber $phoneNumber */
-                $phoneNumber = $verifyForm->get('phone')->getData();
-                $phoneUtils = PhoneNumberUtil::getInstance();
-                $formattedPhone = $phoneUtils->format($phoneNumber, PhoneNumberFormat::E164);
-                $user->setPhone($formattedPhone);
-                // Dont set local to get ISO country code and not Country name.
-                $isoCode = $phoneUtils->getRegionCodeForNumber($phoneNumber);
+            }
+            if (!$validationToken->isValidated()) {
+                if ($this->useSmsValidationMethod() && $verifyForm->has('phone')) {
+                    /** @var PhoneNumber $phoneNumber */
+                    $phoneNumber = $verifyForm->get('phone')->getData();
+                    $phoneUtils = PhoneNumberUtil::getInstance();
+                    $formattedPhone = $phoneUtils->format($phoneNumber, PhoneNumberFormat::E164);
+                    $user->setPhone($formattedPhone);
+                    // Dont set local to get ISO country code and not Country name.
+                    $isoCode = $phoneUtils->getRegionCodeForNumber($phoneNumber);
 
-                if ($isoCode != '') {
-                    $validationToken->setCountryCode($isoCode);
-                    $tokenGenerator = new ValidationTokenGenerator();
-                    $validationToken->setValidationToken($tokenGenerator->generatePassword(10));
-                    $expiresAt = new \DateTime();
-                    $expiresAt->add(new \DateInterval('PT' . $this->getSmsValidity() . 'S'));
-                    $validationToken->setValidationTokenExpiresAt($expiresAt);
-
-                    try {
-                        $this->sendValidationToken($user, $validationToken);
-                        $this->get('em')->merge($validationToken);
-                        $this->get('em')->flush();
-                        return $this->redirect($this->getRedirectedUrl($_locale));
-                    } catch (\Exception $e) {
-                        $validationToken->setValidationToken(null);
-                        $validationToken->setValidationTokenExpiresAt(null);
-                        $this->get('em')->flush();
-
-                        $verifyForm->addError(new FormError($e->getMessage()));
+                    if ('' !== $isoCode) {
+                        $validationToken->setCountryCode($isoCode);
                     }
-                } else {
-                    $verifyForm->addError(new FormError('user_verify.cant_get_country_code_from_phone'));
+                }
+
+                $tokenGenerator = new ValidationTokenGenerator();
+                $validationToken->setValidationToken($tokenGenerator->generatePassword(10));
+                $expiresAt = new \DateTime();
+                $expiresAt->add(new \DateInterval('PT' . $this->getSmsValidity() . 'S'));
+                $validationToken->setValidationTokenExpiresAt($expiresAt);
+
+                try {
+                    $this->sendValidationToken($user, $validationToken);
+                    $this->get('em')->merge($validationToken);
+                    $this->get('em')->flush();
+                    return $this->redirect($this->getRedirectedUrl($_locale));
+                } catch (\Exception $e) {
+                    $validationToken->setValidationToken(null);
+                    $validationToken->setValidationTokenExpiresAt(null);
+                    $this->get('em')->flush();
+                    $verifyForm->addError(new FormError($e->getMessage()));
                 }
             } else {
                 $verifyForm->addError(new FormError('user_verify.validation_token_has_already_been_sent'));

@@ -9,7 +9,7 @@ use RZ\Roadiz\Core\Entities\User;
 
 /**
  * @ORM\Entity(repositoryClass="RZ\Roadiz\Core\Repositories\EntityRepository")
- * @ORM\Table(name="user_validation_token")
+ * @ORM\Table(name="users_validation_tokens")
  */
 class ValidationToken extends AbstractEntity
 {
@@ -161,5 +161,16 @@ class ValidationToken extends AbstractEntity
     {
         $now = new \DateTime();
         return null !== $this->validationToken && $this->validationTokenExpiresAt > $now;
+    }
+
+    /**
+     * @return ValidationToken
+     */
+    public function reset(): self
+    {
+        $this->setValidated(false);
+        $this->setValidationTokenExpiresAt(null);
+        $this->setValidationToken(null);
+        return $this;
     }
 }

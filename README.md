@@ -61,3 +61,12 @@ class MyAwesomeThemeApp extends AbstractUserThemeApp {
 abstract_user_theme_routes:
     resource: abstract_routes.yml
 ```
+
+
+## User events
+
+- `user.signed_up`: After user has been created and EntityManager flushed
+- `user.reset_password`: After user has reset its password (in *forgot my password*) and EntityManager flushed
+- `user.validated`: After user has confirmed its account and EntityManager flushed
+- `user.before_delete`: When user has deleted its account **before** entity is removed and EntityManager flushed (useful to remove references and related entities).
+- `user.after_delete`: When user has deleted its account and **after** EntityManager flushed
