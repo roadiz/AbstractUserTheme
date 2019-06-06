@@ -6,6 +6,7 @@ namespace Themes\AbstractUserTheme\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use RZ\Roadiz\Core\AbstractEntities\AbstractEntity;
 use RZ\Roadiz\Core\Entities\User;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="RZ\Roadiz\Core\Repositories\EntityRepository")
@@ -17,30 +18,35 @@ class ValidationToken extends AbstractEntity
      * @var User|null
      * @ORM\OneToOne(targetEntity="RZ\Roadiz\Core\Entities\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Serializer\Groups({"user"})
      */
     protected $user = null;
 
     /**
      * @var string|null
      * @ORM\Column(type="string", nullable=true, name="token")
+     * @Serializer\Groups({"validationToken"})
      */
     protected $validationToken = null;
 
     /**
      * @var \DateTime|null
      * @ORM\Column(type="datetime", nullable=true, name="expires_at")
+     * @Serializer\Groups({"validationToken"})
      */
     protected $validationTokenExpiresAt = null;
 
     /**
      * @var boolean
      * @ORM\Column(type="boolean")
+     * @Serializer\Groups({"validationToken"})
      */
     protected $validated = false;
 
     /**
      * @var string|null
      * @ORM\Column(type="string", length=5, name="country_code", nullable=true)
+     * @Serializer\Groups({"validationToken"})
      */
     protected $countryCode = null;
 

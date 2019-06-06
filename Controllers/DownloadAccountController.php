@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Themes\AbstractUserTheme\Controllers;
 
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use RZ\Roadiz\Core\Entities\Log;
 use RZ\Roadiz\Core\Entities\User;
@@ -37,7 +38,7 @@ class DownloadAccountController extends AbstractUserThemeApp
             /** @var Serializer $serializer */
             $serializer = $this->get('serializer');
             $response = $this->getDownloadResponse(
-                $serializer->serialize($validationToken, 'json'),
+                $serializer->serialize($validationToken, 'json', SerializationContext::create()->setGroups(['validationToken', 'user'])),
                 $user->getEmail() . '.json'
             );
             $response->prepare($request);
@@ -54,7 +55,7 @@ class DownloadAccountController extends AbstractUserThemeApp
             /** @var Serializer $serializer */
             $serializer = $this->get('serializer');
             $response = $this->getDownloadResponse(
-                $serializer->serialize($logs, 'json', null, 'array<'.Log::class.'>'),
+                $serializer->serialize($logs, 'json', SerializationContext::create()->setGroups(['log', 'log_user', 'log_sources']), 'array<'.Log::class.'>'),
                 $user->getEmail() . '_logs.json'
             );
             $response->prepare($request);
@@ -86,13 +87,13 @@ class DownloadAccountController extends AbstractUserThemeApp
             Response::HTTP_OK,
             []
         );
-        $response->headers->set(
+        /*$response->headers->set(
             'Content-Disposition',
             $response->headers->makeDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT,
                 $filenane
             )
-        );
+        );*/
         return $response;
     }
 }
