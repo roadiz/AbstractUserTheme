@@ -6,6 +6,10 @@
         <source>error</source>
         <target xml:lang="en" state="translated">Error</target>
       </trans-unit>
+      <trans-unit id="forgot_my_password" xml:space="preserve">
+        <source>forgot_my_password</source>
+        <target xml:lang="en" state="translated">I forgot my password…</target>
+      </trans-unit>
       <trans-unit id="login_request.button" xml:space="preserve">
         <source>login_request.button</source>
         <target xml:lang="en" state="translated">Send me a link to change my password</target>
@@ -145,6 +149,10 @@
       <trans-unit id="user._name_.updated_its_account" xml:space="preserve">
         <source>user.%name%.updated_its_account</source>
         <target xml:lang="en" state="translated">%name% just updated its public user account.</target>
+      </trans-unit>
+      <trans-unit id="user.actions" xml:space="preserve">
+        <source>user.actions</source>
+        <target xml:lang="en" state="translated">Actions</target>
       </trans-unit>
       <trans-unit id="user.back_to_account" xml:space="preserve">
         <source>user.back_to_account</source>
