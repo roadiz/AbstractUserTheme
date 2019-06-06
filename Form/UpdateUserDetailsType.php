@@ -55,6 +55,7 @@ class UpdateUserDetailsType extends AbstractType
             'required' => false,
         ])->add('phone', PhoneNumberType::class, [
             'label' => 'user_verify.phone',
+            'required' => false,
             'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
             'preferred_country_choices' => [
                 'FR',
@@ -78,9 +79,12 @@ class UpdateUserDetailsType extends AbstractType
             } catch (NumberParseException $exception) {
                 return null;
             }
-        }, function (\libphonenumber\PhoneNumber $phoneNumber) {
-            $phoneUtils = PhoneNumberUtil::getInstance();
-            return $phoneUtils->format($phoneNumber, PhoneNumberFormat::E164);
+        }, function (?\libphonenumber\PhoneNumber $phoneNumber) {
+            if (null !== $phoneNumber) {
+                $phoneUtils = PhoneNumberUtil::getInstance();
+                return $phoneUtils->format($phoneNumber, PhoneNumberFormat::E164);
+            }
+            return null;
         }));
     }
 

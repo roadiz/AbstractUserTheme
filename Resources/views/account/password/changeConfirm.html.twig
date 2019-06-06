@@ -3,6 +3,9 @@
 
 {% block inner_content %}
     <div class="container">
+        <header>
+            <h1 class="page-title">{{ title }}</h1>
+        </header>
         <hr>
         <p><a class="btn btn-outline-dark" href="{{ path('themeAccount', {_locale: request.locale}) }}">{% trans %}user.back_to_account{% endtrans %}</a></p>
     </div>

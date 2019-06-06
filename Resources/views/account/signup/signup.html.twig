@@ -3,6 +3,10 @@
 
 {% block inner_content %}
     <div class="container">
+        <header>
+            <h1 class="page-title">{{ title }}</h1>
+        </header>
+
         {% form_theme form 'account/forms.html.twig' %}
         {{ form_start(form) }}
         {{ form_widget(form) }}

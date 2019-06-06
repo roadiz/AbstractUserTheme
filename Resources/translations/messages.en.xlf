@@ -150,6 +150,10 @@
         <source>user.%name%.updated_its_account</source>
         <target xml:lang="en" state="translated">%name% just updated its public user account.</target>
       </trans-unit>
+      <trans-unit id="user.account.page_title" xml:space="preserve">
+        <source>user.account.page_title</source>
+        <target xml:lang="en" state="translated">My account</target>
+      </trans-unit>
       <trans-unit id="user.actions" xml:space="preserve">
         <source>user.actions</source>
         <target xml:lang="en" state="translated">Actions</target>
