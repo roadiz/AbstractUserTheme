@@ -31,7 +31,7 @@ trait VerifyValidationTokenControllerTrait
      */
     public function verifyUserTokenAction(Request $request, $_locale = 'fr')
     {
-        $this->validateAccessForRole(static::$firewallRole);
+        $this->denyAccessUnlessGranted(static::$firewallRole);
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
         $user = $this->getUser();

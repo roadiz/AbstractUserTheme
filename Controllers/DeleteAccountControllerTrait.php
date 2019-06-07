@@ -31,7 +31,7 @@ trait DeleteAccountControllerTrait
      */
     public function deleteAction(Request $request, $_locale = "en")
     {
-        $this->validateAccessForRole(static::$firewallRole);
+        $this->denyAccessUnlessGranted(static::$firewallRole);
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
         $user = $this->getUser();

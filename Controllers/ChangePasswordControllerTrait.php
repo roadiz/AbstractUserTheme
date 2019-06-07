@@ -23,7 +23,7 @@ trait ChangePasswordControllerTrait
      */
     public function changeAction(Request $request, $_locale = 'en')
     {
-        $this->validateAccessForRole(static::$firewallRole);
+        $this->denyAccessUnlessGranted(static::$firewallRole);
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
         $user = $this->getUser();
@@ -61,7 +61,7 @@ trait ChangePasswordControllerTrait
      */
     public function confirmChangeAction(Request $request, $_locale = 'en')
     {
-        $this->validateAccessForRole(static::$firewallRole);
+        $this->denyAccessUnlessGranted(static::$firewallRole);
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
         return $this->render($this->getConfirmTemplatePath(), $this->assignation, null, '/');
