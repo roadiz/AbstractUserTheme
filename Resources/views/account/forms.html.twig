@@ -4,7 +4,6 @@
     <div class="g-recaptcha" data-size="" data-sitekey="{{ configs.publicKey }}"></div>
 {%- endblock recaptcha_widget %}
 
-
 {% block tel_widget -%}
     {% if widget is constant('Misd\\PhoneNumberBundle\\Form\\Type\\PhoneNumberType::WIDGET_COUNTRY_CHOICE') %}
         {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) %}

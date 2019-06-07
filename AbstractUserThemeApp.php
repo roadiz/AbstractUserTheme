@@ -27,6 +27,10 @@ class AbstractUserThemeApp extends FrontendController
     public static $priority = 5;
 
     protected static $firewallRoot = '/account';
+    protected static $firewallBasePath = 'themeAccount';
+    protected static $firewallLogin = 'themeSignInUser';
+    protected static $firewallLogout =  'themeLogout';
+    protected static $firewallLoginCheck = 'themeLoginCheck';
     protected static $firewallRole = 'ROLE_USER';
 
     /**
@@ -35,20 +39,15 @@ class AbstractUserThemeApp extends FrontendController
     public static function addDefaultFirewallEntry(Container $container)
     {
         $firewallBasePattern = '^(\/[a-z]{2})?' . static::$firewallRoot;
-        $firewallBasePath = 'themeAccount';
-        $firewallLogin = 'themeSignInUser';
-        $firewallLogout =  'themeLogout';
-        $firewallLoginCheck = 'themeLoginCheck';
-        $firewallBaseRole = [static::$firewallRole];
 
         $firewallEntry = new FirewallEntry(
             $container,
             $firewallBasePattern,
-            $firewallBasePath,
-            $firewallLogin,
-            $firewallLogout,
-            $firewallLoginCheck,
-            $firewallBaseRole,
+            static::$firewallBasePath,
+            static::$firewallLogin,
+            static::$firewallLogout,
+            static::$firewallLoginCheck,
+            [static::$firewallRole],
             AuthenticationSuccessHandler::class
         );
         $firewallEntry
