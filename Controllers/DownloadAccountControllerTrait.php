@@ -42,9 +42,10 @@ trait DownloadAccountControllerTrait
                 $serializer->serialize(
                     $validationToken,
                     'json',
-                    SerializationContext::create()->setGroups(['validationToken', 'user'])
+                    SerializationContext::create()->setGroups($this->getUserSerializationGroups())
                 ),
-                $user->getEmail() . '.json'
+                $user->getEmail() . '.json',
+                !$this->get('kernel')->isDebug()
             );
             $response->prepare($request);
 
@@ -64,10 +65,11 @@ trait DownloadAccountControllerTrait
                 $serializer->serialize(
                     $logs,
                     'json',
-                    SerializationContext::create()->setGroups(['log', 'log_user', 'log_sources']),
+                    SerializationContext::create()->setGroups($this->getLogSerializationGroups()),
                     'array<' . Log::class . '>'
                 ),
-                $user->getEmail() . '_logs.json'
+                $user->getEmail() . '_logs.json',
+                !$this->get('kernel')->isDebug()
             );
             $response->prepare($request);
 
@@ -76,6 +78,22 @@ trait DownloadAccountControllerTrait
         $this->assignation['logs_form'] = $logsForm->createView();
 
         return $this->render($this->getTemplatePath(), $this->assignation, null, '/');
+    }
+
+    /**
+     * @return array
+     */
+    protected function getUserSerializationGroups(): array
+    {
+        return ['validationToken', 'user'];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getLogSerializationGroups(): array
+    {
+        return ['log', 'log_user', 'log_sources'];
     }
 
     /**
@@ -89,23 +107,26 @@ trait DownloadAccountControllerTrait
     /**
      * @param string $data
      * @param string $filename
+     * @param bool   $attachmentDisposition
      *
      * @return Response
      */
-    protected function getDownloadResponse(string $data, string $filename): Response
+    protected function getDownloadResponse(string $data, string $filename, bool $attachmentDisposition = true): Response
     {
         $response = new Response(
             $data,
             Response::HTTP_OK,
             []
         );
-        $response->headers->set(
-            'Content-Disposition',
-            $response->headers->makeDisposition(
-                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                $filename
-            )
-        );
+        if ($attachmentDisposition === true) {
+            $response->headers->set(
+                'Content-Disposition',
+                $response->headers->makeDisposition(
+                    ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                    $filename
+                )
+            );
+        }
         return $response;
     }
 }
