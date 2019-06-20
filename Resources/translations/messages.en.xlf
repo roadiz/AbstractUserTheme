@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="none" original="" target-language="en" datatype="plaintext">
+    <body>
+      <trans-unit id="error" xml:space="preserve">
+        <source>error</source>
+        <target xml:lang="en" state="translated">Error</target>
+      </trans-unit>
+      <trans-unit id="forgot_my_password" xml:space="preserve">
+        <source>forgot_my_password</source>
+        <target xml:lang="en" state="translated">I forgot my password…</target>
+      </trans-unit>
+      <trans-unit id="login_request.button" xml:space="preserve">
+        <source>login_request.button</source>
+        <target xml:lang="en" state="translated">Send me a link to change my password</target>
+      </trans-unit>
+      <trans-unit id="login_request.cant_send_confirmation_email" xml:space="preserve">
+        <source>login_request.cant_send_confirmation_email</source>
+        <target xml:lang="en" state="translated">Impossible to send a password change email.</target>
+      </trans-unit>
+      <trans-unit id="login_request.page_title" xml:space="preserve">
+        <source>login_request.page_title</source>
+        <target xml:lang="en" state="translated">Request a new password</target>
+      </trans-unit>
+      <trans-unit id="login_reset.button" xml:space="preserve">
+        <source>login_reset.button</source>
+        <target xml:lang="en" state="translated">Change my password</target>
+      </trans-unit>
+      <trans-unit id="login_reset.page_title" xml:space="preserve">
+        <source>login_reset.page_title</source>
+        <target xml:lang="en" state="translated">Choose a new password</target>
+      </trans-unit>
+      <trans-unit id="login_reset.token_is_invalid" xml:space="preserve">
+        <source>login_reset.token_is_invalid</source>
+        <target xml:lang="en" state="translated">Password change token is invalid.</target>
+      </trans-unit>
+      <trans-unit id="messagebird_access_key" xml:space="preserve">
+        <source>messagebird_access_key</source>
+        <target xml:lang="en" state="translated">Message Bird API access-token</target>
+      </trans-unit>
+      <trans-unit id="user_change_password.button" xml:space="preserve">
+        <source>user_change_password.button</source>
+        <target xml:lang="en" state="translated">Change my password</target>
+      </trans-unit>
+      <trans-unit id="user_change_password.page_title" xml:space="preserve">
+        <source>user_change_password.page_title</source>
+        <target xml:lang="en" state="translated">Choose a new password</target>
+      </trans-unit>
+      <trans-unit id="user_data_download" xml:space="preserve">
+        <source>user_data_download</source>
+        <target xml:lang="en" state="translated">Download my personal data</target>
+      </trans-unit>
+      <trans-unit id="user_data_download.button" xml:space="preserve">
+        <source>user_data_download.button</source>
+        <target xml:lang="en" state="translated">Download</target>
+      </trans-unit>
+      <trans-unit id="user_data_download.logs_button" xml:space="preserve">
+        <source>user_data_download.logs_button</source>
+        <target xml:lang="en" state="translated">Download log data related to my account</target>
+      </trans-unit>
+      <trans-unit id="user_data_download.page_title" xml:space="preserve">
+        <source>user_data_download.page_title</source>
+        <target xml:lang="en" state="translated">Download my personal data</target>
+      </trans-unit>
+      <trans-unit id="user_data_download.user_button" xml:space="preserve">
+        <source>user_data_download.user_button</source>
+        <target xml:lang="en" state="translated">Download my personal data</target>
+      </trans-unit>
+      <trans-unit id="user_download.button" xml:space="preserve">
+        <source>user_download.button</source>
+        <target xml:lang="en" state="translated">Download my personal data</target>
+      </trans-unit>
+      <trans-unit id="user_verify.account_is_already_validated" xml:space="preserve">
+        <source>user_verify.account_is_already_validated</source>
+        <target xml:lang="en" state="translated">This account is already validated.</target>
+      </trans-unit>
+      <trans-unit id="user_verify.button" xml:space="preserve">
+        <source>user_verify.button</source>
+        <target xml:lang="en" state="translated">Send a validation code</target>
+      </trans-unit>
+      <trans-unit id="user_verify.by_email.button" xml:space="preserve">
+        <source>user_verify.by_email.button</source>
+        <target xml:lang="en" state="translated">Send me a validation code by email</target>
+      </trans-unit>
+      <trans-unit id="user_verify.by_sms.button" xml:space="preserve">
+        <source>user_verify.by_sms.button</source>
+        <target xml:lang="en" state="translated">Send me a validation code by SMS</target>
+      </trans-unit>
+      <trans-unit id="user_verify.cant_get_country_code_from_phone" xml:space="preserve">
+        <source>user_verify.cant_get_country_code_from_phone</source>
+        <target xml:lang="en" state="translated">Impossible to send a validation code to this country by phone.</target>
+      </trans-unit>
+      <trans-unit id="user_verify.email.subject" xml:space="preserve">
+        <source>user_verify.email.subject</source>
+        <target xml:lang="en" state="translated">Validate your user account</target>
+      </trans-unit>
+      <trans-unit id="user_verify.email.validate_message" xml:space="preserve">
+        <source>user_verify.email.validate_message</source>
+        <target xml:lang="en" state="translated">Copy the following code to our website to validate your account and unlock all features.</target>
+      </trans-unit>
+      <trans-unit id="user_verify.enter_token_you_received" xml:space="preserve">
+        <source>user_verify.enter_token_you_received</source>
+        <target xml:lang="en" state="translated">Enter here the code you should have received…</target>
+      </trans-unit>
+      <trans-unit id="user_verify.page_title" xml:space="preserve">
+        <source>user_verify.page_title</source>
+        <target xml:lang="en" state="translated">Validate your account</target>
+      </trans-unit>
+      <trans-unit id="user_verify.phone" xml:space="preserve">
+        <source>user_verify.phone</source>
+        <target xml:lang="en" state="translated">Phone number</target>
+      </trans-unit>
+      <trans-unit id="user_verify.sms.validate_message" xml:space="preserve">
+        <source>user_verify.sms.validate_message</source>
+        <target xml:lang="en" state="translated">Here is your code to validate your user account:</target>
+      </trans-unit>
+      <trans-unit id="user_verify.token_does_not_match" xml:space="preserve">
+        <source>user_verify.token_does_not_match</source>
+        <target xml:lang="en" state="translated">The code you entered is not valid, make sure you typed it right.</target>
+      </trans-unit>
+      <trans-unit id="user_verify.token_has_expired" xml:space="preserve">
+        <source>user_verify.token_has_expired</source>
+        <target xml:lang="en" state="translated">The code you entered has expired, please begin the validation process again.</target>
+      </trans-unit>
+      <trans-unit id="user_verify.token_is_null" xml:space="preserve">
+        <source>user_verify.token_is_null</source>
+        <target xml:lang="en" state="translated">The token has not been registered, please begin the validation process again.</target>
+      </trans-unit>
+      <trans-unit id="user_verify.token.button" xml:space="preserve">
+        <source>user_verify.token.button</source>
+        <target xml:lang="en" state="translated">Validate your account</target>
+      </trans-unit>
+      <trans-unit id="user_verify.validation_token_has_already_been_sent" xml:space="preserve">
+        <source>user_verify.validation_token_has_already_been_sent</source>
+        <target xml:lang="en" state="translated">A validation code has already been sent to you.</target>
+      </trans-unit>
+      <trans-unit id="user_verify.your_validation_token" xml:space="preserve">
+        <source>user_verify.your_validation_token</source>
+        <target xml:lang="en" state="translated">Your validation code:</target>
+      </trans-unit>
+      <trans-unit id="user._name_.created_an_account" xml:space="preserve">
+        <source>user.%name%.created_an_account</source>
+        <target xml:lang="en" state="translated">%name% just created a public user account.</target>
+      </trans-unit>
+      <trans-unit id="user._name_.deleted_his_account" xml:space="preserve">
+        <source>user.%name%.deleted_his_account</source>
+        <target xml:lang="en" state="translated">%name% just deleted its user account.</target>
+      </trans-unit>
+      <trans-unit id="user._name_.updated_its_account" xml:space="preserve">
+        <source>user.%name%.updated_its_account</source>
+        <target xml:lang="en" state="translated">%name% just updated its public user account.</target>
+      </trans-unit>
+      <trans-unit id="user.account.page_title" xml:space="preserve">
+        <source>user.account.page_title</source>
+        <target xml:lang="en" state="translated">My account</target>
+      </trans-unit>
+      <trans-unit id="user.actions" xml:space="preserve">
+        <source>user.actions</source>
+        <target xml:lang="en" state="translated">Actions</target>
+      </trans-unit>
+      <trans-unit id="user.back_to_account" xml:space="preserve">
+        <source>user.back_to_account</source>
+        <target xml:lang="en" state="translated">Back to my account</target>
+      </trans-unit>
+      <trans-unit id="user.change_password" xml:space="preserve">
+        <source>user.change_password</source>
+        <target xml:lang="en" state="translated">Change my password</target>
+      </trans-unit>
+      <trans-unit id="user.delete" xml:space="preserve">
+        <source>user.delete</source>
+        <target xml:lang="en" state="translated">Delete my account</target>
+      </trans-unit>
+      <trans-unit id="user.delete.button" xml:space="preserve">
+        <source>user.delete.button</source>
+        <target xml:lang="en" state="translated">Delete my account and all personal data</target>
+      </trans-unit>
+      <trans-unit id="user.delete.description" xml:space="preserve">
+        <source>user.delete.description</source>
+        <target xml:lang="en" state="translated">Remove all personal data and delete my user account.</target>
+      </trans-unit>
+      <trans-unit id="user.delete.page_title" xml:space="preserve">
+        <source>user.delete.page_title</source>
+        <target xml:lang="en" state="translated">Delete my account</target>
+      </trans-unit>
+      <trans-unit id="user.delete.question" xml:space="preserve">
+        <source>user.delete.question</source>
+        <target xml:lang="en" state="translated">Are you sure you want to delete your user account? Any data will be permanently lost.</target>
+      </trans-unit>
+      <trans-unit id="user.email" xml:space="preserve">
+        <source>user.email</source>
+        <target xml:lang="en" state="translated">Email address</target>
+      </trans-unit>
+      <trans-unit id="user.firstName" xml:space="preserve">
+        <source>user.firstName</source>
+        <target xml:lang="en" state="translated">First name</target>
+      </trans-unit>
+      <trans-unit id="user.is_not_validated" xml:space="preserve">
+        <source>user.is_not_validated</source>
+        <target xml:lang="en" state="translated">Account is not validated yet.</target>
+      </trans-unit>
+      <trans-unit id="user.is_validated" xml:space="preserve">
+        <source>user.is_validated</source>
+        <target xml:lang="en" state="translated">Account validated.</target>
+      </trans-unit>
+      <trans-unit id="user.lastName" xml:space="preserve">
+        <source>user.lastName</source>
+        <target xml:lang="en" state="translated">Last name</target>
+      </trans-unit>
+      <trans-unit id="user.logout" xml:space="preserve">
+        <source>user.logout</source>
+        <target xml:lang="en" state="translated">Log out</target>
+      </trans-unit>
+      <trans-unit id="user.sign_in.page_title" xml:space="preserve">
+        <source>user.sign_in.page_title</source>
+        <target xml:lang="en" state="translated">Sign in</target>
+      </trans-unit>
+      <trans-unit id="user.sign_up.button" xml:space="preserve">
+        <source>user.sign_up.button</source>
+        <target xml:lang="en" state="translated">Create an account</target>
+      </trans-unit>
+      <trans-unit id="user.sign_up.page_title" xml:space="preserve">
+        <source>user.sign_up.page_title</source>
+        <target xml:lang="en" state="translated">Create an account</target>
+      </trans-unit>
+      <trans-unit id="user.update.button" xml:space="preserve">
+        <source>user.update.button</source>
+        <target xml:lang="en" state="translated">Update account information</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

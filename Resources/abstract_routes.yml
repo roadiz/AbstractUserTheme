@@ -1,0 +1,46 @@
+#
+# Account related actions
+# but without firewall
+#
+themeSignInUser:
+    path:     /{_locale}/sign-in
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\LoginController::loginAction
+        _locale: en
+
+themeSignUpUser:
+    path:     /{_locale}/sign-up
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\SignUpController::signUpAction
+        _locale: en
+
+themeDeleteSuccessUser:
+    path:     /{_locale}/delete-account/success
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\DeleteAccountController::confirmAction
+        _locale: en
+
+themeAccount:
+    path: /{_locale}/account
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\AccountController::accountAction
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+
+account_routes:
+    resource: routing/account.yml
+    prefix: /{_locale}/account
+    defaults:
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+
+password_routes:
+    resource: routing/password.yml
+    prefix: /{_locale}/password
+    defaults:
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+

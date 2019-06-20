@@ -1,0 +1,49 @@
+{% extends "pages/base.html.twig" %}
+
+
+{% block inner_content %}
+    <div class="container">
+        <header>
+            <h1 class="page-title">{{ user.email }}</h1>
+            {% if validationToken and validationToken.isValidated %}
+                <p class=""><i class="fa fa-check"></i> {% trans %}user.is_validated{% endtrans %}</p>
+            {% else %}
+                <p class="text-danger"><i class="fa fa-error"></i> {% trans %}user.is_not_validated{% endtrans %}</p>
+                <p><a class="btn btn-outline-primary" href="{{ path('themeVerifyUser', {_locale: request.locale}) }}">{% trans %}user_verify.page_title{% endtrans %}</a></p>
+            {% endif %}
+        </header>
+
+        <div class="row">
+            {% if form %}
+                <div class="col">
+                    {% form_theme form 'account/forms.html.twig' %}
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <div class="form-group">
+                        <button class="btn btn-outline-primary" type="submit">
+                            <span class="label"><span class="label-text">{% trans %}user.update.button{% endtrans %}</span></span>
+                        </button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            {% endif %}
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{% trans %}user.actions{% endtrans %}</h5>
+                        <p><a class="btn btn-outline-dark" href="{{ path('themeLogout', {_locale: request.locale}) }}">{% trans %}user.logout{% endtrans %}</a></p>
+                        <hr>
+                        <p><a class="btn btn-outline-dark" href="{{ path('themeChangePasswordUser', {_locale: request.locale}) }}">{% trans %}user.change_password{% endtrans %}</a></p>
+                        <hr>
+                        <p><a class="btn btn-outline-warning" href="{{ path('themeDownloadUser', {_locale: request.locale}) }}">{% trans %}user_data_download{% endtrans %}</a></p>
+                        <hr>
+                        <p class="text-danger">{% trans %}user.delete.description{% endtrans %}</p>
+                        <p><a class="btn btn-outline-danger" href="{{ path('themeDeleteUser', {_locale: request.locale}) }}">{% trans %}user.delete{% endtrans %}</a></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

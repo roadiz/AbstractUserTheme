@@ -1,0 +1,23 @@
+{% extends "pages/base.html.twig" %}
+
+{% block inner_content %}
+    {% set btn_label = 'user_verify.button'  %}
+    {% if sms_verification %}
+        {% set btn_label = 'user_verify.by_sms.button'  %}
+    {% endif %}
+    {% if email_verification %}
+        {% set btn_label = 'user_verify.by_email.button'  %}
+    {% endif %}
+    <div class="container">
+        {% form_theme form 'account/forms.html.twig' %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">
+                <span class="label"><span class="label-text">{{ btn_label|trans }}</span></span>
+            </button>
+            <a class="btn btn-outline-dark" href="{{ path('themeAccount', {_locale: request.locale}) }}">{% trans %}user.back_to_account{% endtrans %}</a>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

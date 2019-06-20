@@ -1,0 +1,16 @@
+[
+    {
+        "name": "APIs",
+        "inMenu": true,
+        "settings": [
+            {
+                "name": "messagebird_access_key",
+                "value": null,
+                "type": 0,
+                "visible": true,
+                "default_values": null,
+                "description": "MessageBird API access token to use SMS user validation method."
+            }
+        ]
+    }
+]

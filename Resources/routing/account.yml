@@ -1,0 +1,50 @@
+
+#
+# Account routes
+# BEHIND firewall
+#
+themeLogout:
+    path:     /logout
+
+themeLoginCheck:
+    path:     /login_check
+
+themeVerifyUser:
+    path:     /verify
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\VerifyAccountController::verifyUserAction
+        _locale: en
+
+themeVerifyUserTokenPage:
+    path:     /verify/token
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\VerifyValidationTokenController::verifyUserTokenAction
+        _locale: en
+
+themeDeleteUser:
+    path:     /delete
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\DeleteAccountController::deleteAction
+        _locale: en
+
+themeDownloadUser:
+    path:     /download
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\DownloadAccountController::downloadAction
+        _locale: en
+
+themeChangePasswordUser:
+    path:     /change-password
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\ChangePasswordController::changeAction
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
+
+themeConfirmChangePassword:
+    path:     /change-password/confirm
+    defaults:
+        _controller: Themes\AbstractUserTheme\Controllers\ChangePasswordController::confirmChangeAction
+        _locale: en
+    requirements:
+        _locale: "[a-z]{2}"
