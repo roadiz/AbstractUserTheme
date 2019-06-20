@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "roadiz/roadiz": "^1.1 || dev-develop",
+        "roadiz/roadiz": "^1.2 || dev-develop",
         "twig/twig": "1.* || 2.*",
         "messagebird/php-rest-api": "^1.14",
         "misd/phone-number-bundle": "^1.3",
