@@ -7,6 +7,7 @@ use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use MessageBird\Client;
+use MessageBird\Exceptions\RequestException;
 use MessageBird\Objects\Message;
 use RZ\Roadiz\Core\Entities\User;
 use RZ\Roadiz\Utils\EmailManager;
@@ -19,6 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Themes\AbstractUserTheme\Entity\ValidationToken;
 use Themes\AbstractUserTheme\Form\UserVerifyType;
 use Themes\AbstractUserTheme\Security\ValidationTokenGenerator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 trait VerifyAccountControllerTrait
 {
@@ -34,7 +38,8 @@ trait VerifyAccountControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
+     * @throws \Exception
      */
     public function verifyUserAction(Request $request, $_locale = 'en')
     {
@@ -63,7 +68,7 @@ trait VerifyAccountControllerTrait
         }
         $verifyForm->handleRequest($request);
 
-        if ($verifyForm->isValid()) {
+        if ($verifyForm->isSubmitted() && $verifyForm->isValid()) {
             if (null === $validationToken) {
                 $validationToken = new ValidationToken($user);
             }
@@ -115,11 +120,11 @@ trait VerifyAccountControllerTrait
      *
      * @return void
      * @throws \MessageBird\Exceptions\HttpException
-     * @throws \MessageBird\Exceptions\RequestException
+     * @throws RequestException
      * @throws \MessageBird\Exceptions\ServerException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     protected function sendValidationToken(User $user, ValidationToken $validationToken)
     {
@@ -177,11 +182,11 @@ trait VerifyAccountControllerTrait
      *
      * @return \MessageBird\Objects\Balance|\MessageBird\Objects\Hlr|\MessageBird\Objects\Lookup|Message|\MessageBird\Objects\Verify|\MessageBird\Objects\VoiceMessage
      * @throws \MessageBird\Exceptions\HttpException
-     * @throws \MessageBird\Exceptions\RequestException
+     * @throws RequestException
      * @throws \MessageBird\Exceptions\ServerException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     protected function sendValidationSms(User $user)
     {
@@ -201,6 +206,8 @@ trait VerifyAccountControllerTrait
 
     /**
      * @param User $user
+     *
+     * @throws \Exception
      */
     protected function sendValidationEmail(User $user)
     {

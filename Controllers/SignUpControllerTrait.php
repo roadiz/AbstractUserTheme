@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Themes\AbstractUserTheme\Event\FilterUserEvent;
-use Themes\AbstractUserTheme\Event\UserEvents;
+use Themes\AbstractUserTheme\Event\UserSignedUpEvent;
 use Themes\AbstractUserTheme\Form\SignUpType;
+use Twig\Error\RuntimeError;
 
 trait SignUpControllerTrait
 {
@@ -28,7 +28,7 @@ trait SignUpControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public function signUpAction(Request $request, $_locale = "en")
     {
@@ -50,15 +50,14 @@ trait SignUpControllerTrait
         ]);
         $signUpForm->handleRequest($request);
 
-        if ($signUpForm->isValid()) {
+        if ($signUpForm->isSubmitted() && $signUpForm->isValid()) {
             $user->setUsername($user->getEmail());
             $this->get('em')->persist($user);
             $this->get('em')->flush($user);
 
-            $event = new FilterUserEvent($user, $this->get('em'), $this->get('securityTokenStorage'));
             /** @var EventDispatcherInterface $eventDispatcher */
             $eventDispatcher = $this->get('dispatcher');
-            $eventDispatcher->dispatch(UserEvents::USER_SIGNED_UP, $event);
+            $eventDispatcher->dispatch(new UserSignedUpEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
 
             /*
              * Add history log

@@ -162,6 +162,7 @@ class ValidationToken extends AbstractEntity
 
     /**
      * @return bool
+     * @throws \Exception
      */
     public function isValidationTokenValid(): bool
     {

@@ -8,6 +8,12 @@ use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * Class FilterUserEvent
+ *
+ * @package Themes\AbstractUserTheme\Event
+ * @deprecated
+ */
 class FilterUserEvent extends Event
 {
     /**

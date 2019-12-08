@@ -6,12 +6,13 @@ namespace Themes\AbstractUserTheme\Controllers;
 use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Themes\AbstractUserTheme\Event\FilterUserEvent;
-use Themes\AbstractUserTheme\Event\UserEvents;
+use Themes\AbstractUserTheme\Event\UserAfterDeleteEvent;
+use Themes\AbstractUserTheme\Event\UserBeforeDeleteEvent;
+use Twig\Error\RuntimeError;
 
 trait DeleteAccountControllerTrait
 {
@@ -27,7 +28,7 @@ trait DeleteAccountControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public function deleteAction(Request $request, $_locale = "en")
     {
@@ -39,15 +40,14 @@ trait DeleteAccountControllerTrait
             throw $this->createAccessDeniedException();
         }
 
-        /** @var Form $form */
+        /** @var FormInterface $form */
         $form = $this->createForm(FormType::class);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $beforeEvent = new FilterUserEvent($user, $this->get('em'), $this->get('securityTokenStorage'));
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var EventDispatcherInterface $eventDispatcher */
             $eventDispatcher = $this->get('dispatcher');
-            $eventDispatcher->dispatch(UserEvents::USER_BEFORE_DELETE, $beforeEvent);
+            $eventDispatcher->dispatch(new UserBeforeDeleteEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
 
             $msg = $this->getTranslator()->trans('user.%name%.deleted_his_account', [
                 '%name%' => $user->getEmail(),
@@ -58,10 +58,7 @@ trait DeleteAccountControllerTrait
             $this->get('securityTokenStorage')->setToken(null);
             $request->getSession()->invalidate();
 
-            $beforeEvent = new FilterUserEvent($user, $this->get('em'), $this->get('securityTokenStorage'));
-            /** @var EventDispatcherInterface $eventDispatcher */
-            $eventDispatcher = $this->get('dispatcher');
-            $eventDispatcher->dispatch(UserEvents::USER_AFTER_DELETE, $beforeEvent);
+            $eventDispatcher->dispatch(new UserAfterDeleteEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
 
             return $this->redirect($this->getRedirectedUrl($_locale));
         }
@@ -73,7 +70,7 @@ trait DeleteAccountControllerTrait
 
     /**
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public function confirmAction()
     {
