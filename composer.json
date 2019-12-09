@@ -16,8 +16,6 @@
         "roadiz/documents": "dev-feature/sf4.4",
         "roadiz/markdown": "dev-master",
         "ambroisemaupate/intervention-request": "dev-feature/sf4.4",
-        "erusev/parsedown": "^1.8.0-beta-7 | ^1.8.0",
-        "erusev/parsedown-extra": "^0.8.0-beta-1 | ^0.8.0",
         "twig/twig": "2.*",
         "messagebird/php-rest-api": "^1.14",
         "misd/phone-number-bundle": "^1.3",
