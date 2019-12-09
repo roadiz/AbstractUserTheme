@@ -3,11 +3,32 @@ declare(strict_types=1);
 
 namespace Themes\AbstractUserTheme\Event;
 
+/**
+ * Class UserEvents
+ *
+ * @package Themes\AbstractUserTheme\Event
+ * @deprecated
+ */
 final class UserEvents
 {
-    const USER_SIGNED_UP = 'user.signed_up';
-    const USER_RESET_PASSWORD = 'user.reset_password';
-    const USER_VALIDATED = 'user.validated';
-    const USER_BEFORE_DELETE = 'user.before_delete';
-    const USER_AFTER_DELETE = 'user.after_delete';
+    /**
+     * @deprecated
+     */
+    const USER_SIGNED_UP = UserSignedUpEvent::class;
+    /**
+     * @deprecated
+     */
+    const USER_RESET_PASSWORD = UserResetPasswordEvent::class;
+    /**
+     * @deprecated
+     */
+    const USER_VALIDATED = UserValidatedEvent::class;
+    /**
+     * @deprecated
+     */
+    const USER_BEFORE_DELETE = UserBeforeDeleteEvent::class;
+    /**
+     * @deprecated
+     */
+    const USER_AFTER_DELETE = UserAfterDeleteEvent::class;
 }
