@@ -8,11 +8,12 @@ use RZ\Roadiz\CMS\Traits\LoginResetTrait;
 use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Themes\AbstractUserTheme\Event\FilterUserEvent;
-use Themes\AbstractUserTheme\Event\UserEvents;
+use Themes\AbstractUserTheme\Event\UserResetPasswordEvent;
+use Twig\Error\RuntimeError;
 
 trait LoginResetControllerTrait
 {
@@ -30,7 +31,8 @@ trait LoginResetControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function resetAction(Request $request, $token, $_locale = "en")
     {
@@ -39,6 +41,7 @@ trait LoginResetControllerTrait
         /** @var User|null $user */
         $user = $this->getUserByToken($this->get('em'), $token);
 
+        /** @var FormInterface $form */
         $form = $this->createForm(LoginResetForm::class, null, [
             'token' => $token,
             'confirmationTtl' => User::CONFIRMATION_TTL,
@@ -46,12 +49,11 @@ trait LoginResetControllerTrait
         ]);
         $form->handleRequest($request);
 
-        if (null !== $user && $form->isValid()) {
+        if (null !== $user && $form->isSubmitted() && $form->isValid()) {
             if ($this->updateUserPassword($form, $user, $this->get('em'))) {
-                $event = new FilterUserEvent($user, $this->get('em'), $this->get('securityTokenStorage'));
                 /** @var EventDispatcherInterface $eventDispatcher */
                 $eventDispatcher = $this->get('dispatcher');
-                $eventDispatcher->dispatch(UserEvents::USER_RESET_PASSWORD, $event);
+                $eventDispatcher->dispatch(new UserResetPasswordEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
 
                 return $this->redirect($this->getRedirectedUrl($_locale));
             }
@@ -70,7 +72,7 @@ trait LoginResetControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public function confirmAction(Request $request, $_locale = "en")
     {

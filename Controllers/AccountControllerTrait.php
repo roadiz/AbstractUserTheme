@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Controllers;
 
 use RZ\Roadiz\Core\Entities\User;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Themes\AbstractUserTheme\Form\UpdateUserDetailsType;
+use Twig\Error\RuntimeError;
 
 trait AccountControllerTrait
 {
@@ -18,7 +20,7 @@ trait AccountControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public function accountAction(Request $request, $_locale = 'en')
     {
@@ -31,13 +33,14 @@ trait AccountControllerTrait
         }
         $validationToken = $this->getValidationToken();
 
+        /** @var FormInterface $updateForm */
         $updateForm = $this->createForm(UpdateUserDetailsType::class, $user, [
             'em' => $this->get('em'),
             'allowEmailChange' => $this->isAllowingEmailChange()
         ]);
         $updateForm->handleRequest($request);
 
-        if ($updateForm->isValid()) {
+        if ($updateForm->isSubmitted() && $updateForm->isValid()) {
             if ($user->getEmail() !== $user->getUsername()) {
                 /*
                  * Username changed, ask user to validated account again.

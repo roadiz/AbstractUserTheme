@@ -6,6 +6,7 @@ namespace Themes\AbstractUserTheme\Services;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\Translation\Translator;
+use Twig\Loader\FilesystemLoader;
 
 class AbstractUserThemeProvider implements ServiceProviderInterface
 {
@@ -33,7 +34,7 @@ class AbstractUserThemeProvider implements ServiceProviderInterface
             return $translator;
         });
 
-        $container->extend('twig.loaderFileSystem', function (\Twig_Loader_Filesystem $loader) {
+        $container->extend('twig.loaderFileSystem', function (FilesystemLoader $loader) {
             $loader->prependPath(dirname(__DIR__) . '/Resources/views');
             $loader->prependPath(dirname(__DIR__) . '/Resources/views', 'AbstractUserTheme');
             return $loader;

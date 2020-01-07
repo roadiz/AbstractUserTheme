@@ -6,9 +6,11 @@ namespace Themes\AbstractUserTheme\Controllers;
 use RZ\Roadiz\CMS\Forms\LoginRequestForm;
 use RZ\Roadiz\CMS\Traits\LoginRequestTrait;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Error\RuntimeError;
 
 trait LoginRequestControllerTrait
 {
@@ -25,19 +27,21 @@ trait LoginRequestControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function requestAction(Request $request, $_locale = "en")
     {
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
+        /** @var FormInterface $form */
         $form = $this->createForm(LoginRequestForm::class, null, [
             'entityManager' => $this->get('em'),
         ]);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             if (true === $this->sendConfirmationEmail(
                 $form,
                 $this->get('em'),
@@ -70,7 +74,7 @@ trait LoginRequestControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public function confirmAction(Request $request, $_locale = "en")
     {

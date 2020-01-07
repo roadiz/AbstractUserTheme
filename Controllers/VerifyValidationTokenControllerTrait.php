@@ -9,9 +9,9 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Themes\AbstractUserTheme\Event\FilterUserEvent;
-use Themes\AbstractUserTheme\Event\UserEvents;
+use Themes\AbstractUserTheme\Event\UserValidatedEvent;
 use Themes\AbstractUserTheme\Form\VerifyTokenType;
+use Twig\Error\RuntimeError;
 
 trait VerifyValidationTokenControllerTrait
 {
@@ -27,7 +27,7 @@ trait VerifyValidationTokenControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public function verifyUserTokenAction(Request $request, $_locale = 'fr')
     {
@@ -49,7 +49,7 @@ trait VerifyValidationTokenControllerTrait
         $verifyTokenForm = $this->createForm(VerifyTokenType::class);
         $verifyTokenForm->handleRequest($request);
 
-        if ($verifyTokenForm->isValid()) {
+        if ($verifyTokenForm->isSubmitted() && $verifyTokenForm->isValid()) {
             if (null === $validationToken) {
                 $verifyTokenForm->addError(new FormError('user_verify.token_is_null'));
             } elseif ($validationToken->isValidated()) {
@@ -62,10 +62,9 @@ trait VerifyValidationTokenControllerTrait
                 $validationToken->setValidationTokenExpiresAt(null);
                 $this->get('em')->flush();
 
-                $event = new FilterUserEvent($user, $this->get('em'), $this->get('securityTokenStorage'));
                 /** @var EventDispatcherInterface $eventDispatcher */
                 $eventDispatcher = $this->get('dispatcher');
-                $eventDispatcher->dispatch(UserEvents::USER_VALIDATED, $event);
+                $eventDispatcher->dispatch(new UserValidatedEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
 
                 return $this->redirect($this->getAccountRedirectedUrl($_locale));
             } else {

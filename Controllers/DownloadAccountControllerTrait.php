@@ -35,7 +35,7 @@ trait DownloadAccountControllerTrait
         /** @var Form $userForm */
         $userForm = $this->createNamedFormBuilder('download_user')->getForm();
         $userForm->handleRequest($request);
-        if ($userForm->isValid()) {
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
             /** @var Serializer $serializer */
             $serializer = $this->get('serializer');
             $response = $this->getDownloadResponse(
@@ -57,7 +57,7 @@ trait DownloadAccountControllerTrait
         /** @var Form $logsForm */
         $logsForm = $this->createNamedFormBuilder('download_logs')->getForm();
         $logsForm->handleRequest($request);
-        if ($logsForm->isValid()) {
+        if ($logsForm->isSubmitted() && $logsForm->isValid()) {
             $logs = $this->get('em')->getRepository(Log::class)->findByUser($user);
             /** @var Serializer $serializer */
             $serializer = $this->get('serializer');

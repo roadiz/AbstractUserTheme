@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Controllers;
 
 use RZ\Roadiz\Core\Entities\User;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Themes\AbstractUserTheme\Form\ChangePasswordType;
+use Twig\Error\RuntimeError;
 
 trait ChangePasswordControllerTrait
 {
@@ -18,7 +20,7 @@ trait ChangePasswordControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      * @internal param $token
      */
     public function changeAction(Request $request, $_locale = 'en')
@@ -30,11 +32,11 @@ trait ChangePasswordControllerTrait
         if (!($user instanceof User)) {
             throw $this->createAccessDeniedException();
         }
-
+        /** @var FormInterface $form */
         $form = $this->createForm(ChangePasswordType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->get('em')->flush();
             return $this->redirect($this->getRedirectedUrl($_locale));
         }
@@ -57,7 +59,7 @@ trait ChangePasswordControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
     public function confirmChangeAction(Request $request, $_locale = 'en')
     {
