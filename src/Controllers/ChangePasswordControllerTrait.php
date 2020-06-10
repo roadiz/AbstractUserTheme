@@ -88,7 +88,7 @@ trait ChangePasswordControllerTrait
     /**
      * @param string $_locale
      *
-     * @return RedirectResponse
+     * @return string
      */
     protected function getRedirectedUrl(string $_locale): string
     {

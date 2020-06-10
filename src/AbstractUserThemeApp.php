@@ -70,6 +70,7 @@ class AbstractUserThemeApp extends FrontendController
 
     /**
      * @return FileLocator
+     * @throws \ReflectionException
      */
     public static function getFileLocator()
     {
@@ -101,7 +102,7 @@ class AbstractUserThemeApp extends FrontendController
     /**
      * @param string $_locale
      *
-     * @return RedirectResponse
+     * @return string
      */
     protected function getAccountRedirectedUrl(string $_locale): string
     {
