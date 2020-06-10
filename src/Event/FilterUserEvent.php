@@ -12,9 +12,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  * Class FilterUserEvent
  *
  * @package Themes\AbstractUserTheme\Event
- * @deprecated
  */
-class FilterUserEvent extends Event
+abstract class FilterUserEvent extends Event
 {
     /**
      * @var EntityManagerInterface

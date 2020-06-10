@@ -7,7 +7,6 @@ use RZ\Roadiz\CMS\Forms\LoginRequestForm;
 use RZ\Roadiz\CMS\Traits\LoginRequestTrait;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\RuntimeError;

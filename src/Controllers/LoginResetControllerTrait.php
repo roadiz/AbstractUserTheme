@@ -9,11 +9,9 @@ use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Themes\AbstractUserTheme\Event\UserResetPasswordEvent;
-use Twig\Error\RuntimeError;
 
 trait LoginResetControllerTrait
 {
@@ -72,7 +70,6 @@ trait LoginResetControllerTrait
      * @param string  $_locale
      *
      * @return Response
-     * @throws RuntimeError
      */
     public function confirmAction(Request $request, $_locale = "en")
     {
