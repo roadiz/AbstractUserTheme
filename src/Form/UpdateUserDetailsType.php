@@ -75,7 +75,7 @@ class UpdateUserDetailsType extends AbstractType
         $builder->get('phone')->addModelTransformer(new CallbackTransformer(function (?string $phone) {
             try {
                 $phoneUtils = PhoneNumberUtil::getInstance();
-                return $phoneUtils->parse($phone);
+                return $phoneUtils->parse($phone ?? '');
             } catch (NumberParseException $exception) {
                 return null;
             }
