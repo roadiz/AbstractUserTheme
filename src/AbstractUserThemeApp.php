@@ -8,7 +8,6 @@ use RZ\Roadiz\CMS\Controllers\FrontendController;
 use RZ\Roadiz\Core\Entities\User;
 use RZ\Roadiz\Utils\Security\FirewallEntry;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Themes\AbstractUserTheme\Entity\ValidationToken;
 use Themes\AbstractUserTheme\Security\Authentication\AuthenticationSuccessHandler;
 
