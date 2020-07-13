@@ -9,6 +9,7 @@ use libphonenumber\PhoneNumberUtil;
 use MessageBird\Client;
 use MessageBird\Exceptions\RequestException;
 use MessageBird\Objects\Message;
+use MessageBird\Objects\Verify;
 use RZ\Roadiz\Core\Entities\User;
 use RZ\Roadiz\Utils\EmailManager;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -145,7 +146,7 @@ trait VerifyAccountControllerTrait
     /**
      * @param string $_locale
      *
-     * @return RedirectResponse
+     * @return string
      */
     protected function getRedirectedUrl(string $_locale): string
     {
@@ -196,11 +197,13 @@ trait VerifyAccountControllerTrait
         $message->validity = $this->getSmsValidity();
         $message->recipients = [
             // Remove + sign from international phone number
-            str_replace('+', '', $user->getPhone())
+            str_replace('+', '', $user->getPhone() ?? '')
         ];
         $message->body = $this->getTwig()->render($this->getSmsTemplatePath(), $this->assignation);
         $messageReturn = $MessageBird->messages->create($message);
-        $this->get('logger')->debug('MessageBird trace: ' . $messageReturn->getMessage());
+        if ($messageReturn instanceof Verify) {
+            $this->get('logger')->debug('MessageBird trace: ' . $messageReturn->getMessage());
+        }
         return $messageReturn;
     }
 
@@ -213,7 +216,7 @@ trait VerifyAccountControllerTrait
     {
         /** @var EmailManager $emailManager */
         $emailManager = $this->get('emailManager');
-        $emailManager->setReceiver($user->getEmail());
+        $emailManager->setReceiver($user->getEmail() ?? '');
         $emailManager->setSubject($this->getTranslator()->trans($this->getValidationEmailSubject()));
         $emailManager->setEmailTemplate($this->getEmailTemplatePath());
         $emailManager->setAssignation($this->assignation);

@@ -41,7 +41,7 @@ trait AccountControllerTrait
         $updateForm->handleRequest($request);
 
         if ($updateForm->isSubmitted() && $updateForm->isValid()) {
-            if ($user->getEmail() !== $user->getUsername()) {
+            if (null !== $user->getEmail() && $user->getEmail() !== $user->getUsername()) {
                 /*
                  * Username changed, ask user to validated account again.
                  */

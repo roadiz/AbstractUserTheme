@@ -51,7 +51,9 @@ trait SignUpControllerTrait
         $signUpForm->handleRequest($request);
 
         if ($signUpForm->isSubmitted() && $signUpForm->isValid()) {
-            $user->setUsername($user->getEmail());
+            if (null !== $user->getEmail()) {
+                $user->setUsername($user->getEmail());
+            }
             $this->get('em')->persist($user);
             $this->get('em')->flush($user);
 
@@ -97,7 +99,7 @@ trait SignUpControllerTrait
     /**
      * @param string $_locale
      *
-     * @return RedirectResponse
+     * @return string
      */
     protected function getRedirectedUrl(string $_locale): string
     {

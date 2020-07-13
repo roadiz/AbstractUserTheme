@@ -8,7 +8,6 @@ use RZ\Roadiz\CMS\Controllers\FrontendController;
 use RZ\Roadiz\Core\Entities\User;
 use RZ\Roadiz\Utils\Security\FirewallEntry;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Themes\AbstractUserTheme\Entity\ValidationToken;
 use Themes\AbstractUserTheme\Security\Authentication\AuthenticationSuccessHandler;
 
@@ -17,7 +16,7 @@ use Themes\AbstractUserTheme\Security\Authentication\AuthenticationSuccessHandle
  */
 class AbstractUserThemeApp extends FrontendController
 {
-    const VERSION = '1.1.0';
+    const VERSION = '1.2.0';
 
     protected static $themeName = 'Abstract User theme';
     protected static $themeAuthor = 'REZO ZERO';
@@ -70,6 +69,7 @@ class AbstractUserThemeApp extends FrontendController
 
     /**
      * @return FileLocator
+     * @throws \ReflectionException
      */
     public static function getFileLocator()
     {
@@ -101,7 +101,7 @@ class AbstractUserThemeApp extends FrontendController
     /**
      * @param string $_locale
      *
-     * @return RedirectResponse
+     * @return string
      */
     protected function getAccountRedirectedUrl(string $_locale): string
     {

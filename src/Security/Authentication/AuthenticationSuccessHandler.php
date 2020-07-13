@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Themes\AbstractUserTheme\Security\Authentication;
 
-use RZ\Roadiz\Core\Authentification\AuthenticationSuccessHandler as BaseAuthenticationSuccessHandler;
+use RZ\Roadiz\Core\Authentication\AuthenticationSuccessHandler as BaseAuthenticationSuccessHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;

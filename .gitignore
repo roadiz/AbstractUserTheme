@@ -102,11 +102,13 @@ sftp-config.json
 /static/vendors
 /static/fonts
 /static/**
-/Resources/views/svg/sprite.svg.twig
+/src/Resources/views/svg/sprite.svg.twig
 !/static/.gitkeep
+.phpcs-cache
+report.txt
 
 ## Inject files
-/Resources/views/partials/css-inject.html.twig
-/Resources/views/partials/js-inject.html.twig
-/Resources/views/partials/js-inject-modern.html.twig
-/Resources/views/partials/js-inject-legacy.html.twig
+/src/Resources/views/partials/css-inject.html.twig
+/src/Resources/views/partials/js-inject.html.twig
+/src/Resources/views/partials/js-inject-modern.html.twig
+/src/Resources/views/partials/js-inject-legacy.html.twig
