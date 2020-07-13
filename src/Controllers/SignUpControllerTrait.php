@@ -40,7 +40,7 @@ trait SignUpControllerTrait
         }
 
         $user = new User();
-        $user->sendCreationConfirmationEmail(true);
+        $user->sendCreationConfirmationEmail(false);
         /** @var Form $signUpForm */
         $signUpForm = $this->createForm(SignUpType::class, $user, [
             'em' => $this->get('em'),
