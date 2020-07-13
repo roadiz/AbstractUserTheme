@@ -84,8 +84,7 @@ class AbstractUserThemeApp extends FrontendController
             $resourcesFolder . '/config',
         ]);
     }
-
-
+    
     /**
      * @return ValidationToken|null
      */
