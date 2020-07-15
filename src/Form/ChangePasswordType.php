@@ -8,6 +8,8 @@ use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class ChangePasswordType extends AbstractType
 {
@@ -16,6 +18,10 @@ class ChangePasswordType extends AbstractType
         $builder->add('plainPassword', CreatePasswordType::class, [
             'invalid_message' => 'password.must.match',
             'required' => true,
+            'constraints' => [
+                new NotNull(),
+                new NotBlank(),
+            ],
         ]);
     }
 

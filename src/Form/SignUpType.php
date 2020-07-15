@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class SignUpType extends AbstractType
 {
@@ -24,6 +25,7 @@ class SignUpType extends AbstractType
         $builder->add('email', EmailType::class, [
                 'label' => 'user.email',
                 'constraints' => [
+                    new NotNull(),
                     new NotBlank(),
                     new UniqueUsername([
                         'entityManager' => $options['em'],
@@ -37,6 +39,11 @@ class SignUpType extends AbstractType
             ])
             ->add('plainPassword', CreatePasswordType::class, [
                 'invalid_message' => 'password.must.match',
+                'required' => true,
+                'constraints' => [
+                    new NotNull(),
+                    new NotBlank(),
+                ],
             ])
         ;
         if (!empty($options['privateKey']) && !empty($options['publicKey'])) {
