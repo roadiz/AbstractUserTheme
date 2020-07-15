@@ -51,6 +51,7 @@ class AbstractUserThemeApp extends FrontendController
         );
         $firewallEntry
             ->withAnonymousAuthenticationListener()
+            ->withOAuth2AuthenticationListener()
             ->withSwitchUserListener()
             ->withReferer();
 
@@ -84,7 +85,7 @@ class AbstractUserThemeApp extends FrontendController
             $resourcesFolder . '/config',
         ]);
     }
-    
+
     /**
      * @return ValidationToken|null
      */

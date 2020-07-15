@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Themes\AbstractUserTheme\Form\UpdateUserDetailsType;
 use Twig\Error\RuntimeError;
 
@@ -28,51 +29,53 @@ trait AccountControllerTrait
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
         $user = $this->getUser();
-        if (!($user instanceof User)) {
+        if (!($user instanceof UserInterface)) {
             throw $this->createAccessDeniedException();
         }
-        $validationToken = $this->getValidationToken();
 
-        /** @var FormInterface $updateForm */
-        $updateForm = $this->createForm(UpdateUserDetailsType::class, $user, [
-            'em' => $this->get('em'),
-            'allowEmailChange' => $this->isAllowingEmailChange()
-        ]);
-        $updateForm->handleRequest($request);
+        if ($user instanceof User) {
+            $validationToken = $this->getValidationToken();
+            /** @var FormInterface $updateForm */
+            $updateForm = $this->createForm(UpdateUserDetailsType::class, $user, [
+                'em' => $this->get('em'),
+                'allowEmailChange' => $this->isAllowingEmailChange()
+            ]);
+            $updateForm->handleRequest($request);
 
-        if ($updateForm->isSubmitted() && $updateForm->isValid()) {
-            if (null !== $user->getEmail() && $user->getEmail() !== $user->getUsername()) {
-                /*
-                 * Username changed, ask user to validated account again.
-                 */
-                $user->setUsername($user->getEmail());
-                if (null !== $validationToken) {
-                    $validationToken->reset();
+            if ($updateForm->isSubmitted() && $updateForm->isValid()) {
+                if (null !== $user->getEmail() && $user->getEmail() !== $user->getUsername()) {
+                    /*
+                     * Username changed, ask user to validated account again.
+                     */
+                    $user->setUsername($user->getEmail());
+                    if (null !== $validationToken) {
+                        $validationToken->reset();
+                    }
                 }
+
+                $this->get('em')->flush();
+
+                /*
+                 * Add history log
+                 */
+                $msg = $this->getTranslator()->trans('user.%name%.updated_its_account', [
+                    '%name%' => $user->getEmail(),
+                ]);
+                $this->publishConfirmMessage($request, $msg);
+
+                /*
+                 * Connect User right after a successful register.
+                 */
+                $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+                $this->get('securityTokenStorage')->setToken($token);
+
+                return $this->redirect($this->getAccountRedirectedUrl($_locale));
             }
 
-            $this->get('em')->flush();
-
-            /*
-             * Add history log
-             */
-            $msg = $this->getTranslator()->trans('user.%name%.updated_its_account', [
-                '%name%' => $user->getEmail(),
-            ]);
-            $this->publishConfirmMessage($request, $msg);
-
-            /*
-             * Connect User right after a successful register.
-             */
-            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-            $this->get('securityTokenStorage')->setToken($token);
-
-            return $this->redirect($this->getAccountRedirectedUrl($_locale));
+            $this->assignation['validationToken'] = $validationToken;
+            $this->assignation['form'] = $updateForm->createView();
         }
-
         $this->assignation['user'] = $user;
-        $this->assignation['validationToken'] = $validationToken;
-        $this->assignation['form'] = $updateForm->createView();
 
         return $this->render($this->getTemplatePath(), $this->assignation, null, '/');
     }

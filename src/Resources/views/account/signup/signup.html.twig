@@ -6,6 +6,16 @@
             <h1 class="page-title">{{ title }}</h1>
         </header>
 
+        {% if openid %}
+            <p>
+                <a href="{{ openid }}"
+                   class="btn btn-secondary no-ajax-link">
+                    {{ (openid_button_label|default('login_with_openid'))|trans -}}
+                </a>
+            </p>
+            <hr>
+        {% endif %}
+        
         {% form_theme form 'account/forms.html.twig' %}
         {{ form_start(form) }}
         {{ form_widget(form) }}

@@ -9,6 +9,17 @@
         {% if error %}
             <div class="alert alert-danger">{{ error.message|trans }}</div>
         {% endif %}
+
+        {% if openid %}
+            <p>
+                <a href="{{ openid }}"
+                   class="btn btn-secondary no-ajax-link">
+                    {{ (openid_button_label|default('login_with_openid'))|trans -}}
+                </a>
+            </p>
+            <hr>
+        {% endif %}
+
         <form id="login-form" class="form" action="{{ path('themeLoginCheck') }}" method="post">
             {% if _target_path %}
                 <input type="hidden" name="_target_path" id="_target_path" value="{{ _target_path }}" />

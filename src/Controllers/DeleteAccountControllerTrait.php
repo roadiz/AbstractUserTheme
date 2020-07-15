@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Themes\AbstractUserTheme\Event\UserAfterDeleteEvent;
 use Themes\AbstractUserTheme\Event\UserBeforeDeleteEvent;
 use Twig\Error\RuntimeError;
@@ -36,7 +37,7 @@ trait DeleteAccountControllerTrait
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
         $user = $this->getUser();
-        if (null === $user || !$this->isGranted(static::$firewallRole) || !($user instanceof User)) {
+        if (null === $user || !$this->isGranted(static::$firewallRole) || !($user instanceof UserInterface)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -47,18 +48,23 @@ trait DeleteAccountControllerTrait
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var EventDispatcherInterface $eventDispatcher */
             $eventDispatcher = $this->get('dispatcher');
-            $eventDispatcher->dispatch(new UserBeforeDeleteEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
-
             $msg = $this->getTranslator()->trans('user.%name%.deleted_his_account', [
                 '%name%' => $user->getEmail(),
             ]);
+            $eventDispatcher->dispatch(new UserBeforeDeleteEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
             $this->get('logger')->info($msg);
-            $this->get('em')->remove($user);
-            $this->get('em')->flush();
+            if ($user instanceof User) {
+                $this->get('em')->remove($user);
+                $this->get('em')->flush();
+            }
             $this->get('securityTokenStorage')->setToken(null);
             $request->getSession()->invalidate();
 
-            $eventDispatcher->dispatch(new UserAfterDeleteEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
+            $eventDispatcher->dispatch(new UserAfterDeleteEvent(
+                $user,
+                $this->get('em'),
+                $this->get('securityTokenStorage')
+            ));
 
             return $this->redirect($this->getRedirectedUrl($_locale));
         }

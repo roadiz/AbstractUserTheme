@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class FilterUserEvent
@@ -24,18 +25,18 @@ abstract class FilterUserEvent extends Event
      */
     protected $tokenStorage;
     /**
-     * @var User
+     * @var UserInterface
      */
     private $user;
 
     /**
      * FilterUserEvent constructor.
      *
-     * @param User                   $user
+     * @param UserInterface          $user
      * @param EntityManagerInterface $entityManager
      * @param TokenStorageInterface  $tokenStorage
      */
-    public function __construct(User $user, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage)
+    public function __construct(UserInterface $user, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage)
     {
         $this->user = $user;
         $this->entityManager = $entityManager;

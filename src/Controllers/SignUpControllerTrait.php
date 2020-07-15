@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Controllers;
 
 use RZ\Roadiz\Core\Entities\User;
+use RZ\Roadiz\OpenId\OAuth2LinkGenerator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Themes\AbstractUserTheme\Event\UserSignedUpEvent;
 use Themes\AbstractUserTheme\Form\SignUpType;
@@ -83,6 +85,17 @@ trait SignUpControllerTrait
             return $this->redirect($this->getAccountRedirectedUrl($_locale));
         }
 
+        /** @var OAuth2LinkGenerator $oauth2LinkGenerator */
+        $oauth2LinkGenerator = $this->get(OAuth2LinkGenerator::class);
+        if ($oauth2LinkGenerator->isSupported($request)) {
+            $this->assignation['openid_button_label'] = $this->get('settingsBag')->get('openid_button_label');
+            $this->assignation['openid'] = $oauth2LinkGenerator->generate(
+                $request,
+                $this->generateUrl('themeLoginCheck', [
+                    '_locale' => $_locale
+                ], UrlGeneratorInterface::ABSOLUTE_URL)
+            );
+        }
         $this->assignation['form'] = $signUpForm->createView();
 
         return $this->render($this->getTemplatePath(), $this->assignation, null, '/');

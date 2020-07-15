@@ -4,11 +4,14 @@
     <div class="container">
         <header>
             <h1 class="page-title">{{ user.email }}</h1>
-            {% if validationToken and validationToken.isValidated %}
-                <p class=""><i class="fa fa-check"></i> {% trans %}user.is_validated{% endtrans %}</p>
-            {% else %}
-                <p class="text-danger"><i class="fa fa-error"></i> {% trans %}user.is_not_validated{% endtrans %}</p>
-                <p><a class="btn btn-outline-primary" href="{{ path('themeVerifyUser', {_locale: request.locale}) }}">{% trans %}user_verify.page_title{% endtrans %}</a></p>
+            {# Validation only for internal accounts #}
+            {% if app.user and app.user.id %}
+                {% if validationToken and validationToken.isValidated %}
+                    <p class=""><i class="fa fa-check"></i> {% trans %}user.is_validated{% endtrans %}</p>
+                {% else %}
+                    <p class="text-danger"><i class="fa fa-error"></i> {% trans %}user.is_not_validated{% endtrans %}</p>
+                    <p><a class="btn btn-outline-primary" href="{{ path('themeVerifyUser', {_locale: request.locale}) }}">{% trans %}user_verify.page_title{% endtrans %}</a></p>
+                {% endif %}
             {% endif %}
         </header>
 
@@ -31,8 +34,10 @@
                     <div class="card-body">
                         <h5 class="card-title">{% trans %}user.actions{% endtrans %}</h5>
                         <p><a class="btn btn-outline-dark" href="{{ path('themeLogout', {_locale: request.locale}) }}">{% trans %}user.logout{% endtrans %}</a></p>
+                        {% if app.user and app.user.id %}
                         <hr>
                         <p><a class="btn btn-outline-dark" href="{{ path('themeChangePasswordUser', {_locale: request.locale}) }}">{% trans %}user.change_password{% endtrans %}</a></p>
+                        {% endif %}
                         <hr>
                         <p><a class="btn btn-outline-warning" href="{{ path('themeDownloadUser', {_locale: request.locale}) }}">{% trans %}user_data_download{% endtrans %}</a></p>
                         <hr>

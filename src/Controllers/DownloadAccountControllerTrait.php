@@ -11,6 +11,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 trait DownloadAccountControllerTrait
 {
@@ -27,7 +28,7 @@ trait DownloadAccountControllerTrait
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
         $user = $this->getUser();
-        if (!($user instanceof User)) {
+        if (!($user instanceof UserInterface)) {
             throw $this->createAccessDeniedException();
         }
         $validationToken = $this->getValidationToken();
@@ -58,7 +59,11 @@ trait DownloadAccountControllerTrait
         $logsForm = $this->createNamedFormBuilder('download_logs')->getForm();
         $logsForm->handleRequest($request);
         if ($logsForm->isSubmitted() && $logsForm->isValid()) {
-            $logs = $this->get('em')->getRepository(Log::class)->findByUser($user);
+            if ($user instanceof User) {
+                $logs = $this->get('em')->getRepository(Log::class)->findByUser($user);
+            } else {
+                $logs = $this->get('em')->getRepository(Log::class)->findByUsername($user->getUsername());
+            }
             /** @var Serializer $serializer */
             $serializer = $this->get('serializer');
             $response = $this->getDownloadResponse(
