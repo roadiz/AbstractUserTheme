@@ -16,7 +16,7 @@ use Themes\AbstractUserTheme\Security\Authentication\AuthenticationSuccessHandle
  */
 class AbstractUserThemeApp extends FrontendController
 {
-    const VERSION = '1.1.0';
+    const VERSION = '1.2.0';
 
     protected static $themeName = 'Abstract User theme';
     protected static $themeAuthor = 'REZO ZERO';
@@ -51,6 +51,7 @@ class AbstractUserThemeApp extends FrontendController
         );
         $firewallEntry
             ->withAnonymousAuthenticationListener()
+            ->withOAuth2AuthenticationListener()
             ->withSwitchUserListener()
             ->withReferer();
 
@@ -84,7 +85,6 @@ class AbstractUserThemeApp extends FrontendController
             $resourcesFolder . '/config',
         ]);
     }
-
 
     /**
      * @return ValidationToken|null

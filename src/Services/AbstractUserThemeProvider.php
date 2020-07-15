@@ -12,6 +12,9 @@ class AbstractUserThemeProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
+        $container['user_theme.allow_sign_up'] = function () {
+            return false;
+        };
         /*
          * Every path to parse to find doctrine entities
          */
