@@ -36,6 +36,10 @@ trait SignUpControllerTrait
     {
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
+        if ($this->get('user_theme.allow_sign_up') !== true) {
+            throw $this->createNotFoundException('Sign-up is not allowed for this site.');
+        }
+
         if ($request->query->has('_target_path') &&
             1 === preg_match('#^\/#', $request->query->get('_target_path'))) {
             $this->assignation['_target_path'] = $request->query->get('_target_path');

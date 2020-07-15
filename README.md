@@ -6,8 +6,9 @@
 
 ## Features
 
-- Sign-up
+- Sign-up (configurable with `user_theme.allow_sign_up` boolean service)
 - Sign-in
+- Sign-in with OpenID (since Roadiz v1.5)
 - Account validation by email
 - Account validation by SMS (requires MessageBird API access-token)
 - Password change

@@ -2,6 +2,14 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file source-language="none" original="" target-language="en" datatype="plaintext">
     <body>
+      <trans-unit id="already_have_account_sign_in" xml:space="preserve">
+        <source>already_have_account_sign_in</source>
+        <target xml:lang="en" state="translated">Already have an account? Sign in…</target>
+      </trans-unit>
+      <trans-unit id="dont_have_account_yet_sign_up" xml:space="preserve">
+        <source>dont_have_account_yet_sign_up</source>
+        <target xml:lang="en" state="translated">Don’t have an account yet? Sign up…</target>
+      </trans-unit>
       <trans-unit id="error" xml:space="preserve">
         <source>error</source>
         <target xml:lang="en" state="translated">Error</target>
@@ -185,6 +193,10 @@
       <trans-unit id="user.delete.question" xml:space="preserve">
         <source>user.delete.question</source>
         <target xml:lang="en" state="translated">Are you sure you want to delete your user account? Any data will be permanently lost.</target>
+      </trans-unit>
+      <trans-unit id="user.deleted_his_account" xml:space="preserve">
+        <source>user.deleted_his_account</source>
+        <target xml:lang="en" state="translated">Your user account has been deleted.</target>
       </trans-unit>
       <trans-unit id="user.email" xml:space="preserve">
         <source>user.email</source>

@@ -78,8 +78,10 @@ trait DeleteAccountControllerTrait
      * @return Response
      * @throws RuntimeError
      */
-    public function confirmAction()
+    public function confirmAction(Request $request, $_locale = "en")
     {
+        $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
+
         return $this->render($this->getConfirmTemplatePath(), $this->assignation, null, '/');
     }
 

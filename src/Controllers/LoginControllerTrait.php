@@ -40,6 +40,10 @@ trait LoginControllerTrait
                 ], UrlGeneratorInterface::ABSOLUTE_URL)
             );
         }
+        
+        if ($this->get('user_theme.allow_sign_up') === true) {
+            $this->assignation['allow_sign_up'] = true;
+        }
 
         return $this->render($this->getTemplatePath(), $this->assignation, null, '/');
     }

@@ -41,5 +41,15 @@
                 <p><a href="{{ path('themeForgotPassword', {_locale: request.locale}) }}">{% trans %}forgot_my_password{% endtrans %}</a></p>
             </div>
         </form>
+
+        {% if allow_sign_up %}
+            <hr>
+            <p>
+                <a href="{{ path('themeSignUpUser') }}"
+                   class="btn btn-secondary">
+                    {% trans %}dont_have_account_yet_sign_up{% endtrans %}
+                </a>
+            </p>
+        {% endif %}
     </div>
 {% endblock %}
