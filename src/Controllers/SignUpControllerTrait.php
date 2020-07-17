@@ -70,7 +70,12 @@ trait SignUpControllerTrait
 
             /** @var EventDispatcherInterface $eventDispatcher */
             $eventDispatcher = $this->get('dispatcher');
-            $eventDispatcher->dispatch(new UserSignedUpEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
+            $eventDispatcher->dispatch(new UserSignedUpEvent(
+                $user,
+                $this->get('em'),
+                $this->get('securityTokenStorage'),
+                $signUpForm
+            ));
 
             /*
              * Add history log
