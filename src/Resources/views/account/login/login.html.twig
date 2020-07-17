@@ -1,6 +1,9 @@
 {% extends "account/base.html.twig" %}
 
 {% block inner_content %}
+    {% if _target_path is not defined %}
+        {% set _target_path = app.request.get('_target_path', false) %}
+    {% endif %}
     <div class="container">
         <header>
             <h1 class="page-title">{{ title }}</h1>

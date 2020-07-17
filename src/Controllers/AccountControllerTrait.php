@@ -16,6 +16,14 @@ trait AccountControllerTrait
 {
     use ManualSeoTrait;
 
+    protected function createUpdateForm(User $user): FormInterface
+    {
+        return $this->createForm(UpdateUserDetailsType::class, $user, [
+            'em' => $this->get('em'),
+            'allowEmailChange' => $this->isAllowingEmailChange()
+        ]);
+    }
+
     /**
      * @param Request $request
      * @param string  $_locale
@@ -36,10 +44,7 @@ trait AccountControllerTrait
         if ($user instanceof User) {
             $validationToken = $this->getValidationToken();
             /** @var FormInterface $updateForm */
-            $updateForm = $this->createForm(UpdateUserDetailsType::class, $user, [
-                'em' => $this->get('em'),
-                'allowEmailChange' => $this->isAllowingEmailChange()
-            ]);
+            $updateForm = $this->createUpdateForm($user);
             $updateForm->handleRequest($request);
 
             if ($updateForm->isSubmitted() && $updateForm->isValid()) {
@@ -77,7 +82,14 @@ trait AccountControllerTrait
         }
         $this->assignation['user'] = $user;
 
+        $this->handleCustomAccount($request, $_locale, $user);
+
         return $this->render($this->getTemplatePath(), $this->assignation, null, '/');
+    }
+
+    protected function handleCustomAccount(Request $request, string $_locale, UserInterface $user)
+    {
+
     }
 
     /**

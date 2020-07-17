@@ -65,7 +65,7 @@ class SignUpType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'sing_up';
+        return 'sign_up';
     }
 
     public function configureOptions(OptionsResolver $resolver)
