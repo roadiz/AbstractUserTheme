@@ -80,9 +80,8 @@ trait AccountControllerTrait
             $this->assignation['validationToken'] = $validationToken;
             $this->assignation['form'] = $updateForm->createView();
         }
-        $this->assignation['user'] = $user;
-
         $this->handleCustomAccount($request, $_locale, $user);
+        $this->assignation['user'] = $user;
 
         return $this->render($this->getTemplatePath(), $this->assignation, null, '/');
     }

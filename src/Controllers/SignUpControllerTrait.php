@@ -7,6 +7,7 @@ use RZ\Roadiz\Core\Entities\User;
 use RZ\Roadiz\OpenId\OAuth2LinkGenerator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -22,6 +23,16 @@ trait SignUpControllerTrait
     protected function getPageTitle(): string
     {
         return $this->get('translator')->trans('user.sign_up.page_title');
+    }
+
+    protected function createSignUpForm(Request $request, User $user): FormInterface
+    {
+        return $this->createForm(SignUpType::class, $user, [
+            'em' => $this->get('em'),
+            'request' => $request,
+            'publicKey' => $this->get('settingsBag')->get('recaptcha_public_key'),
+            'privateKey' => $this->get('settingsBag')->get('recaptcha_private_key'),
+        ]);
     }
 
     /**
@@ -47,12 +58,7 @@ trait SignUpControllerTrait
         $user = new User();
         $user->sendCreationConfirmationEmail(false);
         /** @var Form $signUpForm */
-        $signUpForm = $this->createForm(SignUpType::class, $user, [
-            'em' => $this->get('em'),
-            'request' => $request,
-            'publicKey' => $this->get('settingsBag')->get('recaptcha_public_key'),
-            'privateKey' => $this->get('settingsBag')->get('recaptcha_private_key'),
-        ]);
+        $signUpForm = $this-> createSignUpForm($request, $user);
         $signUpForm->handleRequest($request);
 
         if ($signUpForm->isSubmitted() && $signUpForm->isValid()) {
