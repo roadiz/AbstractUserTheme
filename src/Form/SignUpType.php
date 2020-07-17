@@ -90,7 +90,7 @@ class SignUpType extends AbstractType
         $resolver->setAllowedTypes('em', EntityManagerInterface::class);
         $resolver->setAllowedTypes('email', 'string');
         $resolver->setAllowedTypes('request', Request::class);
-        $resolver->setAllowedTypes('publicKey', 'string');
-        $resolver->setAllowedTypes('privateKey', 'string');
+        $resolver->setAllowedTypes('publicKey', ['string', 'null']);
+        $resolver->setAllowedTypes('privateKey', ['string', 'null']);
     }
 }
