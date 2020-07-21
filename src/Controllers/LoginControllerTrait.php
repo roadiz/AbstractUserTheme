@@ -33,14 +33,20 @@ trait LoginControllerTrait
         $oauth2LinkGenerator = $this->get(OAuth2LinkGenerator::class);
         if ($oauth2LinkGenerator->isSupported($request)) {
             $this->assignation['openid_button_label'] = $this->get('settingsBag')->get('openid_button_label');
+            $state = [];
+            $redirectParams = [
+                '_locale' => $_locale,
+            ];
+            if ($request->get('_target_path', false) && substr($request->get('_target_path'), 0, 1) === '/') {
+                $state['_target_path'] = trim((string) $request->get('_target_path'));
+            }
             $this->assignation['openid'] = $oauth2LinkGenerator->generate(
                 $request,
-                $this->generateUrl('themeLoginCheck', [
-                    '_locale' => $_locale
-                ], UrlGeneratorInterface::ABSOLUTE_URL)
+                $this->generateUrl('themeLoginCheck', $redirectParams, UrlGeneratorInterface::ABSOLUTE_URL),
+                $state
             );
         }
-        
+
         if ($this->get('user_theme.allow_sign_up') === true) {
             $this->assignation['allow_sign_up'] = true;
         }
