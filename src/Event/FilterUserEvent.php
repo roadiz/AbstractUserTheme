@@ -44,7 +44,7 @@ abstract class FilterUserEvent extends Event
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
     public function getUser()
     {

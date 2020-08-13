@@ -88,7 +88,6 @@ trait AccountControllerTrait
 
     protected function handleCustomAccount(Request $request, string $_locale, UserInterface $user)
     {
-
     }
 
     /**

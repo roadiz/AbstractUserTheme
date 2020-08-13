@@ -49,7 +49,7 @@ trait DeleteAccountControllerTrait
             /** @var EventDispatcherInterface $eventDispatcher */
             $eventDispatcher = $this->get('dispatcher');
             $msg = $this->getTranslator()->trans('user.%name%.deleted_his_account', [
-                '%name%' => $user->getEmail(),
+                '%name%' => $user->getUsername(),
             ]);
             $eventDispatcher->dispatch(new UserBeforeDeleteEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
             $this->get('logger')->info($msg);

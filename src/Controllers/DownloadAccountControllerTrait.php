@@ -45,7 +45,7 @@ trait DownloadAccountControllerTrait
                     'json',
                     SerializationContext::create()->setGroups($this->getUserSerializationGroups())
                 ),
-                $user->getEmail() . '.json',
+                $user->getUsername() . '.json',
                 !$this->get('kernel')->isDebug()
             );
             $response->prepare($request);
@@ -73,7 +73,7 @@ trait DownloadAccountControllerTrait
                     SerializationContext::create()->setGroups($this->getLogSerializationGroups()),
                     'array<' . Log::class . '>'
                 ),
-                $user->getEmail() . '_logs.json',
+                $user->getUsername() . '_logs.json',
                 !$this->get('kernel')->isDebug()
             );
             $response->prepare($request);
