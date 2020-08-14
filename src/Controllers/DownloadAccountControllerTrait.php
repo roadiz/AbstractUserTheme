@@ -22,6 +22,14 @@ trait DownloadAccountControllerTrait
         return $this->get('translator')->trans('user_data_download.page_title');
     }
 
+    /**
+     * @return mixed
+     */
+    protected function getDownloadableUserModel()
+    {
+        return $this->getValidationToken();
+    }
+
     public function downloadAction(Request $request, $_locale = 'en')
     {
         $this->denyAccessUnlessGranted(static::$firewallRole);
@@ -31,7 +39,6 @@ trait DownloadAccountControllerTrait
         if (!($user instanceof UserInterface)) {
             throw $this->createAccessDeniedException();
         }
-        $validationToken = $this->getValidationToken();
 
         /** @var Form $userForm */
         $userForm = $this->createNamedFormBuilder('download_user')->getForm();
@@ -41,7 +48,7 @@ trait DownloadAccountControllerTrait
             $serializer = $this->get('serializer');
             $response = $this->getDownloadResponse(
                 $serializer->serialize(
-                    $validationToken,
+                    $this->getDownloadableUserModel(),
                     'json',
                     SerializationContext::create()->setGroups($this->getUserSerializationGroups())
                 ),
