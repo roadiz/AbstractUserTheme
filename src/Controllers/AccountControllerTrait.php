@@ -5,6 +5,7 @@ namespace Themes\AbstractUserTheme\Controllers;
 
 use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -80,14 +81,24 @@ trait AccountControllerTrait
             $this->assignation['validationToken'] = $validationToken;
             $this->assignation['form'] = $updateForm->createView();
         }
-        $this->handleCustomAccount($request, $_locale, $user);
+        $response = $this->handleCustomAccount($request, $_locale, $user);
+        if (null !== $response) {
+            return $response;
+        }
         $this->assignation['user'] = $user;
 
         return $this->render($this->getTemplatePath(), $this->assignation, null, '/');
     }
 
-    protected function handleCustomAccount(Request $request, string $_locale, UserInterface $user)
+    /**
+     * @param Request       $request
+     * @param string        $_locale
+     * @param UserInterface $user
+     * @return Response|null
+     */
+    protected function handleCustomAccount(Request $request, string $_locale, UserInterface $user): ?Response
     {
+        return null;
     }
 
     /**
