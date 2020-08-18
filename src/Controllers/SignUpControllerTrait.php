@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Controllers;
 
 use RZ\Roadiz\Core\Entities\User;
+use RZ\Roadiz\OpenId\Exception\DiscoveryNotAvailableException;
 use RZ\Roadiz\OpenId\OAuth2LinkGenerator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
@@ -99,17 +100,22 @@ trait SignUpControllerTrait
             return $this->redirect($this->getAccountRedirectedUrl($_locale));
         }
 
-        /** @var OAuth2LinkGenerator $oauth2LinkGenerator */
-        $oauth2LinkGenerator = $this->get(OAuth2LinkGenerator::class);
-        if ($oauth2LinkGenerator->isSupported($request)) {
-            $this->assignation['openid_button_label'] = $this->get('settingsBag')->get('openid_button_label');
-            $this->assignation['openid'] = $oauth2LinkGenerator->generate(
-                $request,
-                $this->generateUrl('themeLoginCheck', [
-                    '_locale' => $_locale
-                ], UrlGeneratorInterface::ABSOLUTE_URL)
-            );
+        try {
+            /** @var OAuth2LinkGenerator $oauth2LinkGenerator */
+            $oauth2LinkGenerator = $this->get(OAuth2LinkGenerator::class);
+            if ($oauth2LinkGenerator->isSupported($request)) {
+                $this->assignation['openid_button_label'] = $this->get('settingsBag')->get('openid_button_label');
+                $this->assignation['openid'] = $oauth2LinkGenerator->generate(
+                    $request,
+                    $this->generateUrl('themeLoginCheck', [
+                        '_locale' => $_locale
+                    ], UrlGeneratorInterface::ABSOLUTE_URL)
+                );
+            }
+        } catch (DiscoveryNotAvailableException $exception) {
+            $this->get('logger')->error($exception->getMessage());
         }
+        
         $this->assignation['form'] = $signUpForm->createView();
 
         return $this->render($this->getTemplatePath(), $this->assignation, null, '/');
