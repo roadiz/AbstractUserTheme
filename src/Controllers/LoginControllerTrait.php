@@ -24,7 +24,7 @@ trait LoginControllerTrait
      */
     public function loginAction(Request $request, $_locale = 'en')
     {
-        $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request));
+        $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
         /** @var AuthenticationUtils $helper */
         $helper = $this->get('securityAuthenticationUtils');
         $this->assignation['last_username'] = $helper->getLastUsername();
