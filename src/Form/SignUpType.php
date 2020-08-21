@@ -16,14 +16,21 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class SignUpType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('email', EmailType::class, [
                 'label' => 'user.email',
                 'constraints' => [
+                    new NotNull(),
                     new NotBlank(),
                     new UniqueUsername([
                         'entityManager' => $options['em'],
@@ -37,6 +44,11 @@ class SignUpType extends AbstractType
             ])
             ->add('plainPassword', CreatePasswordType::class, [
                 'invalid_message' => 'password.must.match',
+                'required' => true,
+                'constraints' => [
+                    new NotNull(),
+                    new NotBlank(),
+                ],
             ])
         ;
         if (!empty($options['privateKey']) && !empty($options['publicKey'])) {
@@ -58,9 +70,13 @@ class SignUpType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'sing_up';
+        return 'sign_up';
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -83,7 +99,7 @@ class SignUpType extends AbstractType
         $resolver->setAllowedTypes('em', EntityManagerInterface::class);
         $resolver->setAllowedTypes('email', 'string');
         $resolver->setAllowedTypes('request', Request::class);
-        $resolver->setAllowedTypes('publicKey', 'string');
-        $resolver->setAllowedTypes('privateKey', 'string');
+        $resolver->setAllowedTypes('publicKey', ['string', 'null']);
+        $resolver->setAllowedTypes('privateKey', ['string', 'null']);
     }
 }

@@ -11,6 +11,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserVerifyType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('phone', PhoneNumberType::class, [
@@ -32,11 +37,18 @@ class UserVerifyType extends AbstractType
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'user_verify';
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

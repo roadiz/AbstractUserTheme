@@ -10,6 +10,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class VerifyTokenType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('token', TextType::class, [
@@ -17,11 +22,18 @@ class VerifyTokenType extends AbstractType
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'token_verify';
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

@@ -11,6 +11,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 trait DownloadAccountControllerTrait
 {
@@ -21,16 +22,29 @@ trait DownloadAccountControllerTrait
         return $this->get('translator')->trans('user_data_download.page_title');
     }
 
+    /**
+     * @return mixed
+     */
+    protected function getDownloadableUserModel()
+    {
+        return $this->getValidationToken();
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $_locale
+     *
+     * @return Response
+     */
     public function downloadAction(Request $request, $_locale = 'en')
     {
         $this->denyAccessUnlessGranted(static::$firewallRole);
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
         $user = $this->getUser();
-        if (!($user instanceof User)) {
+        if (!($user instanceof UserInterface)) {
             throw $this->createAccessDeniedException();
         }
-        $validationToken = $this->getValidationToken();
 
         /** @var Form $userForm */
         $userForm = $this->createNamedFormBuilder('download_user')->getForm();
@@ -40,11 +54,11 @@ trait DownloadAccountControllerTrait
             $serializer = $this->get('serializer');
             $response = $this->getDownloadResponse(
                 $serializer->serialize(
-                    $validationToken,
+                    $this->getDownloadableUserModel(),
                     'json',
                     SerializationContext::create()->setGroups($this->getUserSerializationGroups())
                 ),
-                $user->getEmail() . '.json',
+                $user->getUsername() . '.json',
                 !$this->get('kernel')->isDebug()
             );
             $response->prepare($request);
@@ -58,7 +72,11 @@ trait DownloadAccountControllerTrait
         $logsForm = $this->createNamedFormBuilder('download_logs')->getForm();
         $logsForm->handleRequest($request);
         if ($logsForm->isSubmitted() && $logsForm->isValid()) {
-            $logs = $this->get('em')->getRepository(Log::class)->findByUser($user);
+            if ($user instanceof User) {
+                $logs = $this->get('em')->getRepository(Log::class)->findByUser($user);
+            } else {
+                $logs = $this->get('em')->getRepository(Log::class)->findByUsername($user->getUsername());
+            }
             /** @var Serializer $serializer */
             $serializer = $this->get('serializer');
             $response = $this->getDownloadResponse(
@@ -68,7 +86,7 @@ trait DownloadAccountControllerTrait
                     SerializationContext::create()->setGroups($this->getLogSerializationGroups()),
                     'array<' . Log::class . '>'
                 ),
-                $user->getEmail() . '_logs.json',
+                $user->getUsername() . '_logs.json',
                 !$this->get('kernel')->isDebug()
             );
             $response->prepare($request);

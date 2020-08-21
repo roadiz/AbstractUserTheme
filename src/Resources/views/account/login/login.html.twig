@@ -1,6 +1,9 @@
 {% extends "account/base.html.twig" %}
 
 {% block inner_content %}
+    {% if _target_path is not defined %}
+        {% set _target_path = app.request.get('_target_path', false) %}
+    {% endif %}
     <div class="container">
         <header>
             <h1 class="page-title">{{ title }}</h1>
@@ -9,6 +12,17 @@
         {% if error %}
             <div class="alert alert-danger">{{ error.message|trans }}</div>
         {% endif %}
+
+        {% if openid %}
+            <p>
+                <a href="{{ openid }}"
+                   class="btn btn-secondary btn-open-id no-ajax-link">
+                    {{ (openid_button_label|default('login_with_openid'))|trans -}}
+                </a>
+            </p>
+            <hr>
+        {% endif %}
+
         <form id="login-form" class="form" action="{{ path('themeLoginCheck') }}" method="post">
             {% if _target_path %}
                 <input type="hidden" name="_target_path" id="_target_path" value="{{ _target_path }}" />
@@ -30,5 +44,15 @@
                 <p><a href="{{ path('themeForgotPassword', {_locale: request.locale}) }}">{% trans %}forgot_my_password{% endtrans %}</a></p>
             </div>
         </form>
+
+        {% if allow_sign_up %}
+            <hr>
+            <p>
+                <a href="{{ path('themeSignUpUser') }}"
+                   class="btn btn-secondary">
+                    {% trans %}dont_have_account_yet_sign_up{% endtrans %}
+                </a>
+            </p>
+        {% endif %}
     </div>
 {% endblock %}

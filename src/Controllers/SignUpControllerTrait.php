@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Controllers;
 
 use RZ\Roadiz\Core\Entities\User;
+use RZ\Roadiz\OpenId\Exception\DiscoveryNotAvailableException;
+use RZ\Roadiz\OpenId\OAuth2LinkGenerator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Themes\AbstractUserTheme\Event\UserSignedUpEvent;
 use Themes\AbstractUserTheme\Form\SignUpType;
@@ -23,6 +26,16 @@ trait SignUpControllerTrait
         return $this->get('translator')->trans('user.sign_up.page_title');
     }
 
+    protected function createSignUpForm(Request $request, User $user): FormInterface
+    {
+        return $this->createForm(SignUpType::class, $user, [
+            'em' => $this->get('em'),
+            'request' => $request,
+            'publicKey' => $this->get('settingsBag')->get('recaptcha_public_key'),
+            'privateKey' => $this->get('settingsBag')->get('recaptcha_private_key'),
+        ]);
+    }
+
     /**
      * @param Request $request
      * @param string  $_locale
@@ -34,20 +47,19 @@ trait SignUpControllerTrait
     {
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
+        if ($this->get('user_theme.allow_sign_up') !== true) {
+            throw $this->createNotFoundException('Sign-up is not allowed for this site.');
+        }
+
         if ($request->query->has('_target_path') &&
             1 === preg_match('#^\/#', $request->query->get('_target_path'))) {
             $this->assignation['_target_path'] = $request->query->get('_target_path');
         }
 
         $user = new User();
-        $user->sendCreationConfirmationEmail(true);
+        $user->sendCreationConfirmationEmail(false);
         /** @var Form $signUpForm */
-        $signUpForm = $this->createForm(SignUpType::class, $user, [
-            'em' => $this->get('em'),
-            'request' => $request,
-            'publicKey' => $this->get('settingsBag')->get('recaptcha_public_key'),
-            'privateKey' => $this->get('settingsBag')->get('recaptcha_private_key'),
-        ]);
+        $signUpForm = $this-> createSignUpForm($request, $user);
         $signUpForm->handleRequest($request);
 
         if ($signUpForm->isSubmitted() && $signUpForm->isValid()) {
@@ -59,7 +71,12 @@ trait SignUpControllerTrait
 
             /** @var EventDispatcherInterface $eventDispatcher */
             $eventDispatcher = $this->get('dispatcher');
-            $eventDispatcher->dispatch(new UserSignedUpEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
+            $eventDispatcher->dispatch(new UserSignedUpEvent(
+                $user,
+                $this->get('em'),
+                $this->get('securityTokenStorage'),
+                $signUpForm
+            ));
 
             /*
              * Add history log
@@ -83,6 +100,22 @@ trait SignUpControllerTrait
             return $this->redirect($this->getAccountRedirectedUrl($_locale));
         }
 
+        try {
+            /** @var OAuth2LinkGenerator $oauth2LinkGenerator */
+            $oauth2LinkGenerator = $this->get(OAuth2LinkGenerator::class);
+            if ($oauth2LinkGenerator->isSupported($request)) {
+                $this->assignation['openid_button_label'] = $this->get('settingsBag')->get('openid_button_label');
+                $this->assignation['openid'] = $oauth2LinkGenerator->generate(
+                    $request,
+                    $this->generateUrl('themeLoginCheck', [
+                        '_locale' => $_locale
+                    ], UrlGeneratorInterface::ABSOLUTE_URL)
+                );
+            }
+        } catch (DiscoveryNotAvailableException $exception) {
+            $this->get('logger')->error($exception->getMessage());
+        }
+        
         $this->assignation['form'] = $signUpForm->createView();
 
         return $this->render($this->getTemplatePath(), $this->assignation, null, '/');
