@@ -15,7 +15,6 @@ use RZ\Roadiz\Utils\EmailManager;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Themes\AbstractUserTheme\Entity\ValidationToken;
@@ -211,6 +210,7 @@ trait VerifyAccountControllerTrait
      * @param User $user
      *
      * @throws \Exception
+     * @return void
      */
     protected function sendValidationEmail(User $user)
     {

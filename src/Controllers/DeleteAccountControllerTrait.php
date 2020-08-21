@@ -75,8 +75,10 @@ trait DeleteAccountControllerTrait
     }
 
     /**
+     * @param Request $request
+     * @param string  $_locale
+     *
      * @return Response
-     * @throws RuntimeError
      */
     public function confirmAction(Request $request, $_locale = "en")
     {

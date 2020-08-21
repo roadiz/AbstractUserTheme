@@ -27,7 +27,7 @@
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "@stable",
-        "phpstan/phpstan": "^0.11.19",
-        "phpstan/phpstan-doctrine": "^0.11.6"
+        "phpstan/phpstan": "^0.12.38",
+        "phpstan/phpstan-doctrine": "^0.12.19"
     }
 }

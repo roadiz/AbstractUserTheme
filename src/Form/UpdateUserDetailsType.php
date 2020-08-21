@@ -28,6 +28,11 @@ use Symfony\Component\Validator\Constraints\Email;
 
 class UpdateUserDetailsType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($options['allowEmailChange'] === true) {
@@ -93,6 +98,10 @@ class UpdateUserDetailsType extends AbstractType
         return 'update_user';
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

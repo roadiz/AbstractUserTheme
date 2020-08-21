@@ -30,6 +30,12 @@ trait DownloadAccountControllerTrait
         return $this->getValidationToken();
     }
 
+    /**
+     * @param Request $request
+     * @param string  $_locale
+     *
+     * @return Response
+     */
     public function downloadAction(Request $request, $_locale = 'en')
     {
         $this->denyAccessUnlessGranted(static::$firewallRole);

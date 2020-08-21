@@ -10,6 +10,10 @@ use Twig\Loader\FilesystemLoader;
 
 class AbstractUserThemeProvider implements ServiceProviderInterface
 {
+    /**
+     * @param Container $container
+     * @return void
+     */
     public function register(Container $container)
     {
         $container['user_theme.allow_sign_up'] = function () {

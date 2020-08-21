@@ -16,8 +16,6 @@ use Themes\AbstractUserTheme\Security\Authentication\AuthenticationSuccessHandle
  */
 class AbstractUserThemeApp extends FrontendController
 {
-    const VERSION = '1.2.0';
-
     protected static $themeName = 'Abstract User theme';
     protected static $themeAuthor = 'REZO ZERO';
     protected static $themeCopyright = 'REZO ZERO';
@@ -25,15 +23,34 @@ class AbstractUserThemeApp extends FrontendController
     protected static $backendTheme = false;
     public static $priority = 5;
 
+    /**
+     * @var string
+     */
     protected static $firewallRoot = '/account';
+    /**
+     * @var string
+     */
     protected static $firewallBasePath = 'themeAccount';
+    /**
+     * @var string
+     */
     protected static $firewallLogin = 'themeSignInUser';
+    /**
+     * @var string
+     */
     protected static $firewallLogout =  'themeLogout';
+    /**
+     * @var string
+     */
     protected static $firewallLoginCheck = 'themeLoginCheck';
+    /**
+     * @var string
+     */
     protected static $firewallRole = 'ROLE_USER';
 
     /**
-     * {@inheritdoc}
+     * @param Container $container
+     * @return void
      */
     public static function addDefaultFirewallEntry(Container $container)
     {

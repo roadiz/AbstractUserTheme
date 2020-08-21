@@ -28,6 +28,8 @@ trait ManualSeoTrait
      *
      * Override this method in your theme to add your own service
      * and data.
+     *
+     * @return void
      */
     protected function extendAssignation()
     {
