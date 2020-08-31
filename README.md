@@ -67,7 +67,7 @@ abstract_user_theme_routes:
 
 ### Override controller and their methods
 
-All controller are just empty classes using `Traits` so you can easily override them by recreating you route and controller inside your own theme.
+All controllers are just empty classes using `Traits` so you can easily override them by recreating you route and controller inside your own theme.
 
 ```php
 <?php

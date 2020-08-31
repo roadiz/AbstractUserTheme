@@ -5,7 +5,6 @@ namespace Themes\AbstractUserTheme\Controllers;
 
 use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -44,7 +43,6 @@ trait AccountControllerTrait
 
         if ($user instanceof User) {
             $validationToken = $this->getValidationToken();
-            /** @var FormInterface $updateForm */
             $updateForm = $this->createUpdateForm($user);
             $updateForm->handleRequest($request);
 

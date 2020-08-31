@@ -1,16 +1,26 @@
 [
     {
-        "name": "APIs",
-        "inMenu": true,
-        "settings": [
-            {
-                "name": "messagebird_access_key",
-                "value": null,
-                "type": 0,
-                "visible": true,
-                "default_values": null,
-                "description": "MessageBird API access token to use SMS user validation method."
-            }
-        ]
+        "name": "messagebird_access_key",
+        "value": null,
+        "type": 0,
+        "visible": true,
+        "default_values": null,
+        "description": "MessageBird API access token to use SMS user validation method.",
+        "settingGroup": {
+            "name": "APIs",
+            "inMenu": true
+        }
+    },
+    {
+        "name": "need_user_validation",
+        "value": null,
+        "visible": true,
+        "encrypted": false,
+        "description": "Require new public users to verify their account (SMS or email).",
+        "settingGroup": {
+            "name": "Site informations",
+            "inMenu": true
+        },
+        "type": 5
     }
 ]
