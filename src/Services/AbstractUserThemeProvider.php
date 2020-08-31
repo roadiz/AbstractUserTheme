@@ -6,6 +6,8 @@ namespace Themes\AbstractUserTheme\Services;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\Translation\Translator;
+use Themes\AbstractUserTheme\Validator\AccountValidator;
+use Themes\AbstractUserTheme\Validator\AccountValidatorInterface;
 use Twig\Loader\FilesystemLoader;
 
 class AbstractUserThemeProvider implements ServiceProviderInterface
@@ -19,6 +21,18 @@ class AbstractUserThemeProvider implements ServiceProviderInterface
         $container['user_theme.allow_sign_up'] = function () {
             return false;
         };
+
+        $container[AccountValidatorInterface::class] = function (Container $c) {
+            return new AccountValidator(
+                $c['settingsBag']->get('need_user_validation', false),
+                $c['settingsBag']->get('messagebird_access_key', null),
+                $c['emailManager'],
+                $c['settingsBag']->get('site_name', 'Roadiz'),
+                $c['twig.environment'],
+                $c['logger']
+            );
+        };
+
         /*
          * Every path to parse to find doctrine entities
          */
