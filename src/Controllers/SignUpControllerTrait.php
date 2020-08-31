@@ -18,7 +18,6 @@ use Themes\AbstractUserTheme\Entity\ValidationToken;
 use Themes\AbstractUserTheme\Event\UserSignedUpEvent;
 use Themes\AbstractUserTheme\Form\SignUpType;
 use Themes\AbstractUserTheme\Validator\AccountValidatorInterface;
-use Twig\Error\RuntimeError;
 
 trait SignUpControllerTrait
 {
@@ -43,10 +42,9 @@ trait SignUpControllerTrait
 
     /**
      * @param Request $request
-     * @param string  $_locale
+     * @param string $_locale
      *
      * @return Response
-     * @throws RuntimeError
      */
     public function signUpAction(Request $request, $_locale = "en")
     {

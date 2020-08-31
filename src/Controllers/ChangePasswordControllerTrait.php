@@ -5,7 +5,6 @@ namespace Themes\AbstractUserTheme\Controllers;
 
 use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Themes\AbstractUserTheme\Form\ChangePasswordType;
@@ -21,7 +20,6 @@ trait ChangePasswordControllerTrait
      *
      * @return Response
      * @throws RuntimeError
-     * @internal param $token
      */
     public function changeAction(Request $request, $_locale = 'en')
     {

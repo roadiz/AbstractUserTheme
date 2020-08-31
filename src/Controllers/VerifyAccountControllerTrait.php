@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Controllers;
 
 use libphonenumber\PhoneNumber;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
 use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Form;
@@ -15,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Themes\AbstractUserTheme\Entity\ValidationToken;
 use Themes\AbstractUserTheme\Form\UserVerifyType;
 use Themes\AbstractUserTheme\Validator\AccountValidatorInterface;
-use Twig\Error\RuntimeError;
 
 trait VerifyAccountControllerTrait
 {
@@ -72,13 +69,11 @@ trait VerifyAccountControllerTrait
                 if ($accountValidator->useSmsValidationMethod() && $verifyForm->has('phone')) {
                     /** @var PhoneNumber $phoneNumber */
                     $phoneNumber = $verifyForm->get('phone')->getData();
-                    $accountValidator->parsePhoneNumber(
+                    $user->setPhone($accountValidator->parsePhoneNumber(
                         $validationToken,
-                        $user,
                         $phoneNumber
-                    );
+                    ));
                 }
-
                 try {
                     $accountValidator->sendValidationToken($user, $validationToken);
                     $this->get('em')->merge($validationToken);

@@ -3,20 +3,26 @@ declare(strict_types=1);
 
 namespace Themes\AbstractUserTheme\Validator;
 
+use DateInterval;
+use DateTime;
+use Exception;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use MessageBird\Client;
+use MessageBird\Exceptions\HttpException;
 use MessageBird\Exceptions\RequestException;
+use MessageBird\Exceptions\ServerException;
+use MessageBird\Objects\Balance;
+use MessageBird\Objects\Hlr;
+use MessageBird\Objects\Lookup;
 use MessageBird\Objects\Message;
 use MessageBird\Objects\Verify;
+use MessageBird\Objects\VoiceMessage;
 use Psr\Log\LoggerInterface;
-use RZ\Roadiz\Core\Entities\User;
 use RZ\Roadiz\Utils\EmailManager;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormError;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Themes\AbstractUserTheme\Entity\ValidationToken;
-use Themes\AbstractUserTheme\Event\UserValidatedEvent;
 use Themes\AbstractUserTheme\Security\ValidationTokenGenerator;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -80,7 +86,7 @@ class AccountValidator implements AccountValidatorInterface
      * @param mixed $token
      * @return ValidationToken
      * @throws InvalidValidationTokenException
-     * @throws \Exception
+     * @throws Exception
      */
     public function validate(?ValidationToken $validationToken, $token): ValidationToken
     {
@@ -105,25 +111,21 @@ class AccountValidator implements AccountValidatorInterface
 
     /**
      * @param ValidationToken $validationToken
-     * @param User $user
      * @param PhoneNumber $phoneNumber
-     * @return ValidationToken
+     * @return string
      */
     public function parsePhoneNumber(
         ValidationToken $validationToken,
-        User $user,
         PhoneNumber $phoneNumber
-    ): ValidationToken {
+    ): string {
         $phoneUtils = PhoneNumberUtil::getInstance();
         $formattedPhone = $phoneUtils->format($phoneNumber, PhoneNumberFormat::E164);
-        $user->setPhone($formattedPhone);
         // Dont set local to get ISO country code and not Country name.
         $isoCode = $phoneUtils->getRegionCodeForNumber($phoneNumber);
         if ('' !== $isoCode) {
             $validationToken->setCountryCode($isoCode);
         }
-
-        return $validationToken;
+        return $formattedPhone;
     }
 
 
@@ -154,14 +156,14 @@ class AccountValidator implements AccountValidatorInterface
     /**
      * @param ValidationToken $validationToken
      * @return ValidationToken
-     * @throws \Exception
+     * @throws Exception
      */
     protected function populateValidationToken(ValidationToken $validationToken): ValidationToken
     {
         $tokenGenerator = new ValidationTokenGenerator();
         $validationToken->setValidationToken($tokenGenerator->generatePassword(10));
-        $expiresAt = new \DateTime();
-        $expiresAt->add(new \DateInterval('PT' . $this->getTokenValidity() . 'S'));
+        $expiresAt = new DateTime();
+        $expiresAt->add(new DateInterval('PT' . $this->getTokenValidity() . 'S'));
         $validationToken->setValidationTokenExpiresAt($expiresAt);
 
         return $validationToken;
@@ -180,32 +182,35 @@ class AccountValidator implements AccountValidatorInterface
     }
 
     /**
-     * @param User $user
+     * @param UserInterface $user
      * @param ValidationToken $validationToken
      *
      * @return void
-     * @throws \MessageBird\Exceptions\HttpException
+     * @throws HttpException
      * @throws RequestException
-     * @throws \MessageBird\Exceptions\ServerException
+     * @throws ServerException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \Exception
+     * @throws Exception
      */
-    public function sendValidationToken(User $user, ValidationToken $validationToken): void
+    public function sendValidationToken(UserInterface $user, ValidationToken $validationToken): void
     {
         $this->populateValidationToken($validationToken);
 
         $data['user'] = $user;
         $data['validationToken'] = $validationToken;
-        $data['email'] = $user->getEmail();
+        $data['email'] = method_exists($user, 'getEmail') ? $user->getEmail() : $user->getUsername();
 
         /*
          * SMS gateway
          */
-        if ($this->useSmsValidationMethod() && null !== $user->getPhone()) {
+        if ($this->useSmsValidationMethod() &&
+            method_exists($user, 'getPhone') &&
+            null !== $user->getPhone() &&
+            is_string($user->getPhone())) {
             $data['sms_verification'] = true;
-            $this->sendValidationSms($user, $data);
+            $this->sendValidationSms($user->getPhone(), $data);
         } else {
             $data['email_verification'] = true;
             $this->sendValidationEmail($user, $data);
@@ -213,17 +218,17 @@ class AccountValidator implements AccountValidatorInterface
     }
 
     /**
-     * @param User $user
+     * @param string $phoneNumber
      * @param array $data
-     * @return \MessageBird\Objects\Balance|\MessageBird\Objects\Hlr|\MessageBird\Objects\Lookup|Message|\MessageBird\Objects\Verify|\MessageBird\Objects\VoiceMessage
+     * @return Balance|Hlr|Lookup|Message|Verify|VoiceMessage
+     * @throws HttpException
      * @throws LoaderError
      * @throws RequestException
      * @throws RuntimeError
+     * @throws ServerException
      * @throws SyntaxError
-     * @throws \MessageBird\Exceptions\HttpException
-     * @throws \MessageBird\Exceptions\ServerException
      */
-    protected function sendValidationSms(User $user, array $data)
+    protected function sendValidationSms(string $phoneNumber, array $data)
     {
         $MessageBird = new Client($this->messageBirdAccessKey);
         $message = new Message();
@@ -231,7 +236,7 @@ class AccountValidator implements AccountValidatorInterface
         $message->validity = $this->getTokenValidity();
         $message->recipients = [
             // Remove + sign from international phone number
-            str_replace('+', '', $user->getPhone() ?? '')
+            str_replace('+', '', $phoneNumber ?? '')
         ];
         $message->body = $this->templating->render($this->getSmsTemplatePath(), $data);
         $messageReturn = $MessageBird->messages->create($message);
@@ -242,15 +247,21 @@ class AccountValidator implements AccountValidatorInterface
     }
 
     /**
-     * @param User $user
+     * @param UserInterface $user
      * @param array $data
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function sendValidationEmail(User $user, array $data)
+    protected function sendValidationEmail(UserInterface $user, array $data)
     {
-        $this->emailManager->setReceiver($user->getEmail() ?? '');
-        $this->emailManager->setSubject($this->emailManager->getTranslator()->trans($this->getValidationEmailSubject()));
+        if (method_exists($user, 'getEmail')) {
+            $this->emailManager->setReceiver($user->getEmail() ?? '');
+        } else {
+            $this->emailManager->setReceiver($user->getUsername() ?? '');
+        }
+        $this->emailManager->setSubject(
+            $this->emailManager->getTranslator()->trans($this->getValidationEmailSubject())
+        );
         $this->emailManager->setEmailTemplate($this->getEmailTemplatePath());
         $this->emailManager->setAssignation($data);
 

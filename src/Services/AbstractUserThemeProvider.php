@@ -22,9 +22,13 @@ class AbstractUserThemeProvider implements ServiceProviderInterface
             return false;
         };
 
+        $container['user_theme.need_user_validation'] = function (Container $c) {
+            return $c['settingsBag']->get('need_user_validation', false);
+        };
+
         $container[AccountValidatorInterface::class] = function (Container $c) {
             return new AccountValidator(
-                $c['settingsBag']->get('need_user_validation', false),
+                $c['user_theme.need_user_validation'],
                 $c['settingsBag']->get('messagebird_access_key', null),
                 $c['emailManager'],
                 $c['settingsBag']->get('site_name', 'Roadiz'),

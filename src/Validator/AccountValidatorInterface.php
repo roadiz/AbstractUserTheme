@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Validator;
 
 use libphonenumber\PhoneNumber;
-use RZ\Roadiz\Core\Entities\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Themes\AbstractUserTheme\Entity\ValidationToken;
 
 interface AccountValidatorInterface
@@ -19,11 +19,13 @@ interface AccountValidatorInterface
 
     /**
      * @param ValidationToken $validationToken
-     * @param User $user
      * @param PhoneNumber $phoneNumber
-     * @return ValidationToken
+     * @return string
      */
-    public function parsePhoneNumber(ValidationToken $validationToken, User $user, PhoneNumber $phoneNumber): ValidationToken;
+    public function parsePhoneNumber(
+        ValidationToken $validationToken,
+        PhoneNumber $phoneNumber
+    ): string;
 
     public function canByPassValidation(): bool;
 
@@ -33,5 +35,5 @@ interface AccountValidatorInterface
 
     public function resetValidationToken(ValidationToken $validationToken): ValidationToken;
 
-    public function sendValidationToken(User $user, ValidationToken $validationToken): void;
+    public function sendValidationToken(UserInterface $user, ValidationToken $validationToken): void;
 }
