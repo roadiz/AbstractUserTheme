@@ -9,13 +9,18 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Themes\AbstractUserTheme\Entity\ValidationToken;
 use Themes\AbstractUserTheme\Event\UserValidatedEvent;
 use Themes\AbstractUserTheme\Form\VerifyTokenType;
+use Themes\AbstractUserTheme\Validator\AccountValidatorInterface;
+use Themes\AbstractUserTheme\Validator\InvalidValidationTokenException;
 use Twig\Error\RuntimeError;
 
 trait VerifyValidationTokenControllerTrait
 {
     use ManualSeoTrait;
+
+    abstract protected function getValidationToken(): ?ValidationToken;
 
     protected function getPageTitle(): string
     {
@@ -40,7 +45,12 @@ trait VerifyValidationTokenControllerTrait
         }
 
         $validationToken = $this->getValidationToken();
+        /** @var AccountValidatorInterface $accountValidator */
+        $accountValidator = $this->get(AccountValidatorInterface::class);
 
+        /*
+         * Validation token is already validated…
+         */
         if (null !== $validationToken && $validationToken->isValidated()) {
             return $this->redirect($this->getAccountRedirectedUrl($_locale));
         }
@@ -50,25 +60,24 @@ trait VerifyValidationTokenControllerTrait
         $verifyTokenForm->handleRequest($request);
 
         if ($verifyTokenForm->isSubmitted() && $verifyTokenForm->isValid()) {
-            if (null === $validationToken) {
-                $verifyTokenForm->addError(new FormError('user_verify.token_is_null'));
-            } elseif ($validationToken->isValidated()) {
-                $verifyTokenForm->addError(new FormError('user_verify.account_is_already_validated'));
-            } elseif (!$validationToken->isValidationTokenValid()) {
-                $verifyTokenForm->addError(new FormError('user_verify.token_has_expired'));
-            } elseif ($verifyTokenForm->get('token')->getData() === $validationToken->getValidationToken()) {
-                $validationToken->setValidated(true);
-                $validationToken->setValidationToken(null);
-                $validationToken->setValidationTokenExpiresAt(null);
+            try {
+                $accountValidator->validate(
+                    $validationToken,
+                    $verifyTokenForm->get('token')->getData()
+                );
                 $this->get('em')->flush();
 
                 /** @var EventDispatcherInterface $eventDispatcher */
                 $eventDispatcher = $this->get('dispatcher');
-                $eventDispatcher->dispatch(new UserValidatedEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
+                $eventDispatcher->dispatch(new UserValidatedEvent(
+                    $user,
+                    $this->get('em'),
+                    $this->get('securityTokenStorage')
+                ));
 
                 return $this->redirect($this->getAccountRedirectedUrl($_locale));
-            } else {
-                $verifyTokenForm->addError(new FormError('user_verify.token_does_not_match'));
+            } catch (InvalidValidationTokenException $e) {
+                $verifyTokenForm->addError(new FormError($e->getMessage()));
             }
         }
         $this->assignation['user'] = $user;

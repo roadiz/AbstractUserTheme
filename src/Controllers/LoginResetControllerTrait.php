@@ -51,7 +51,9 @@ trait LoginResetControllerTrait
             if ($this->updateUserPassword($form, $user, $this->get('em'))) {
                 /** @var EventDispatcherInterface $eventDispatcher */
                 $eventDispatcher = $this->get('dispatcher');
-                $eventDispatcher->dispatch(new UserResetPasswordEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
+                $eventDispatcher->dispatch(
+                    new UserResetPasswordEvent($user, $this->get('em'), $this->get('securityTokenStorage'))
+                );
 
                 return $this->redirect($this->getRedirectedUrl($_locale));
             }

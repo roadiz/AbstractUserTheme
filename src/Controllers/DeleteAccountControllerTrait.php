@@ -7,7 +7,6 @@ use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -51,7 +50,9 @@ trait DeleteAccountControllerTrait
             $msg = $this->getTranslator()->trans('user.%name%.deleted_his_account', [
                 '%name%' => $user->getUsername(),
             ]);
-            $eventDispatcher->dispatch(new UserBeforeDeleteEvent($user, $this->get('em'), $this->get('securityTokenStorage')));
+            $eventDispatcher->dispatch(
+                new UserBeforeDeleteEvent($user, $this->get('em'), $this->get('securityTokenStorage'))
+            );
             $this->get('logger')->info($msg);
             if ($user instanceof User) {
                 $this->get('em')->remove($user);
