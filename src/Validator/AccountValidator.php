@@ -134,7 +134,7 @@ class AccountValidator implements AccountValidatorInterface
      */
     public function canByPassValidation(): bool
     {
-        return !$this->useSmsValidationMethod() || !$this->needUserValidation;
+        return !$this->useSmsValidationMethod() && !$this->needUserValidation;
     }
 
     /**
