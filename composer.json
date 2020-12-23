@@ -10,12 +10,12 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2 || ^8.0",
         "roadiz/roadiz": "~1.6.0 || dev-develop",
         "roadiz/models": "~1.6.0 || dev-develop",
         "roadiz/documents": "~1.6.0 || dev-develop",
         "roadiz/markdown": "~1.6.0 || dev-develop",
-        "twig/twig": "2.*",
+        "twig/twig": "^3.0",
         "messagebird/php-rest-api": "^1.14",
         "odolbeau/phone-number-bundle": "^3.0",
         "ext-json": "*"
