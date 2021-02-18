@@ -19,7 +19,6 @@ trait AccountControllerTrait
     protected function createUpdateForm(User $user): FormInterface
     {
         return $this->createForm(UpdateUserDetailsType::class, $user, [
-            'em' => $this->get('em'),
             'allowEmailChange' => $this->isAllowingEmailChange()
         ]);
     }

@@ -33,7 +33,6 @@ trait SignUpControllerTrait
     protected function createSignUpForm(Request $request, User $user): FormInterface
     {
         return $this->createForm(SignUpType::class, $user, [
-            'em' => $this->get('em'),
             'request' => $request,
             'publicKey' => $this->get('settingsBag')->get('recaptcha_public_key'),
             'privateKey' => $this->get('settingsBag')->get('recaptcha_private_key'),

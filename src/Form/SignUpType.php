@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Themes\AbstractUserTheme\Form;
 
-use Doctrine\ORM\EntityManagerInterface;
 use RZ\Roadiz\CMS\Forms\Constraints\Recaptcha;
-use RZ\Roadiz\CMS\Forms\Constraints\UniqueEmail;
-use RZ\Roadiz\CMS\Forms\Constraints\UniqueUsername;
+use RZ\Roadiz\CMS\Forms\Constraints\UniqueEntity;
 use RZ\Roadiz\CMS\Forms\CreatePasswordType;
 use RZ\Roadiz\CMS\Forms\RecaptchaType;
 use RZ\Roadiz\Core\Entities\User;
@@ -15,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
@@ -31,15 +30,8 @@ class SignUpType extends AbstractType
                 'label' => 'user.email',
                 'constraints' => [
                     new NotNull(),
+                    new Email(),
                     new NotBlank(),
-                    new UniqueUsername([
-                        'entityManager' => $options['em'],
-                        'currentValue' => $options['email'],
-                    ]),
-                    new UniqueEmail([
-                        'entityManager' => $options['em'],
-                        'currentValue' => $options['email'],
-                    ]),
                 ],
             ])
             ->add('plainPassword', CreatePasswordType::class, [
@@ -89,14 +81,24 @@ class SignUpType extends AbstractType
             'verifyUrl' => 'https://www.google.com/recaptcha/api/siteverify',
             'publicKey' => null,
             'privateKey' => null,
+            'constraints' => [
+                new UniqueEntity([
+                    'fields' => [
+                        'email'
+                    ]
+                ]),
+                new UniqueEntity([
+                    'fields' => [
+                        'username',
+                    ]
+                ])
+            ]
         ]);
 
         $resolver->setRequired([
-            'em',
             'request'
         ]);
 
-        $resolver->setAllowedTypes('em', EntityManagerInterface::class);
         $resolver->setAllowedTypes('email', 'string');
         $resolver->setAllowedTypes('request', Request::class);
         $resolver->setAllowedTypes('publicKey', ['string', 'null']);
