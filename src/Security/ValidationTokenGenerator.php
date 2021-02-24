@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Themes\AbstractUserTheme\Security;
 
-use RZ\Roadiz\Utils\Security\PasswordGeneratorInterface;
-use RZ\Roadiz\Utils\Security\RandomGenerator;
+use RZ\Roadiz\Random\PasswordGeneratorInterface;
+use RZ\Roadiz\Random\RandomGenerator;
 
 class ValidationTokenGenerator extends RandomGenerator implements PasswordGeneratorInterface
 {
