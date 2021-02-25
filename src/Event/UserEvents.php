@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Event;
 
 /**
- * Class UserEvents
- *
  * @package Themes\AbstractUserTheme\Event
  * @deprecated
  */

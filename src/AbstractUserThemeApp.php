@@ -11,9 +11,6 @@ use Symfony\Component\Config\FileLocator;
 use Themes\AbstractUserTheme\Entity\ValidationToken;
 use Themes\AbstractUserTheme\Security\Authentication\AuthenticationSuccessHandler;
 
-/**
- * AbstractUserThemeApp class
- */
 class AbstractUserThemeApp extends FrontendController
 {
     protected static $themeName = 'Abstract User theme';

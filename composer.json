@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
-        "roadiz/roadiz": "~1.6.0 || dev-develop",
+        "php": ">=7.4",
+        "roadiz/roadiz": "~1.6.0",
         "twig/twig": "^3.0",
         "messagebird/php-rest-api": "^1.14",
         "odolbeau/phone-number-bundle": "^3.0",
@@ -25,11 +25,6 @@
     "require-dev": {
         "squizlabs/php_codesniffer": "@stable",
         "phpstan/phpstan": "^0.12.38",
-        "phpstan/phpstan-doctrine": "^0.12.19",
-        "roadiz/models": "~1.6.0 || dev-develop",
-        "roadiz/documents": "~1.6.0 || dev-develop",
-        "roadiz/markdown": "~1.6.0 || dev-develop",
-        "roadiz/entity-generator": "~1.6.0 || dev-main",
-        "roadiz/random": "~1.6.0 || dev-main"
+        "phpstan/phpstan-doctrine": "^0.12.19"
     }
 }

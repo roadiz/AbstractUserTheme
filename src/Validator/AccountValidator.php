@@ -57,7 +57,6 @@ class AccountValidator implements AccountValidatorInterface
     protected $logger;
 
     /**
-     * AccountValidator constructor.
      * @param bool $needUserValidation
      * @param string|null $messageBirdAccessKey
      * @param EmailManager $emailManager
