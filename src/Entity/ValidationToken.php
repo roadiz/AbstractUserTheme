@@ -51,8 +51,6 @@ class ValidationToken extends AbstractEntity
     protected $countryCode = null;
 
     /**
-     * ValidationToken constructor.
-     *
      * @param User|null $user
      */
     public function __construct(?User $user)

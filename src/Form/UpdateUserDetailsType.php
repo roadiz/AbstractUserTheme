@@ -1,30 +1,25 @@
 <?php
-/**
- * blackfin-tech.com - UpdateUserDetailsType.php
- *
- * Initial version by: ambroisemaupate
- * Initial version created on: 2019-06-05
- */
 declare(strict_types=1);
 
 namespace Themes\AbstractUserTheme\Form;
 
-use Doctrine\ORM\EntityManagerInterface;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber;
-use RZ\Roadiz\CMS\Forms\Constraints\UniqueEmail;
-use RZ\Roadiz\CMS\Forms\Constraints\UniqueUsername;
+use RZ\Roadiz\CMS\Forms\Constraints\UniqueEntity;
 use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class UpdateUserDetailsType extends AbstractType
 {
@@ -39,15 +34,9 @@ class UpdateUserDetailsType extends AbstractType
             $builder->add('email', EmailType::class, [
                 'label' => 'user.email',
                 'constraints' => [
+                    new NotNull(),
                     new Email(),
-                    new UniqueEmail([
-                        'currentValue' => $builder->getData()->getEmail(),
-                        'entityManager' => $options['em'],
-                    ]),
-                    new UniqueUsername([
-                        'currentValue' => $builder->getData()->getEmail(),
-                        'entityManager' => $options['em'],
-                    ])
+                    new NotBlank(),
                 ]
             ]);
         }
@@ -110,11 +99,24 @@ class UpdateUserDetailsType extends AbstractType
             'allowEmailChange' => false,
         ]);
 
-        $resolver->setRequired([
-            'em'
-        ]);
+        $resolver->setNormalizer('constraints', function (Options $options) {
+            if ($options['allowEmailChange'] === true) {
+                return [
+                    new UniqueEntity([
+                        'fields' => [
+                            'email'
+                        ]
+                    ]),
+                    new UniqueEntity([
+                        'fields' => [
+                            'username',
+                        ]
+                    ])
+                ];
+            }
+            return [];
+        });
 
-        $resolver->setAllowedTypes('em', EntityManagerInterface::class);
         $resolver->setAllowedTypes('allowEmailChange', 'boolean');
     }
 }
