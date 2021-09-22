@@ -73,9 +73,9 @@ trait DownloadAccountControllerTrait
         $logsForm->handleRequest($request);
         if ($logsForm->isSubmitted() && $logsForm->isValid()) {
             if ($user instanceof User) {
-                $logs = $this->get('em')->getRepository(Log::class)->findByUser($user);
+                $logs = $this->em()->getRepository(Log::class)->findByUser($user);
             } else {
-                $logs = $this->get('em')->getRepository(Log::class)->findByUsername($user->getUsername());
+                $logs = $this->em()->getRepository(Log::class)->findByUsername($user->getUsername());
             }
             /** @var Serializer $serializer */
             $serializer = $this->get('serializer');

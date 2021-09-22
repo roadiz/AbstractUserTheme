@@ -31,30 +31,12 @@ use Twig\Error\SyntaxError;
 
 class AccountValidator implements AccountValidatorInterface
 {
-    /**
-     * @var bool
-     */
-    protected $needUserValidation = true;
-    /**
-     * @var string|null
-     */
-    protected $messageBirdAccessKey = null;
-    /**
-     * @var EmailManager
-     */
-    protected $emailManager;
-    /**
-     * @var string
-     */
-    protected $siteName = 'Roadiz';
-    /**
-     * @var Environment
-     */
-    protected $templating;
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
+    protected bool $needUserValidation = true;
+    protected ?string $messageBirdAccessKey = null;
+    protected EmailManager $emailManager;
+    protected string $siteName = 'Roadiz';
+    protected Environment $templating;
+    protected LoggerInterface $logger;
 
     /**
      * @param bool $needUserValidation

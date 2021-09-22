@@ -17,7 +17,7 @@ trait ManualSeoTrait
     public function getNodeSEO(NodesSources $fallbackNodeSource = null)
     {
         return [
-            'title' => $this->getPageTitle() . ' — ' . $this->get('settingsBag')->get('site_name'),
+            'title' => $this->getPageTitle() . ' — ' . $this->getSettingsBag()->get('site_name'),
             'description' => $this->getPageTitle(),
             'keywords' => '',
         ];

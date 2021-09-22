@@ -56,7 +56,7 @@ trait AccountControllerTrait
                     }
                 }
 
-                $this->get('em')->flush();
+                $this->em()->flush();
 
                 /*
                  * Add history log

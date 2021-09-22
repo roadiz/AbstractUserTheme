@@ -22,7 +22,7 @@ class ValidationTokenGenerator extends RandomGenerator implements PasswordGenera
      *
      * @see https://gist.github.com/tylerhall/521810
      */
-    public function generatePassword($length = 6)
+    public function generatePassword(int $length = 6)
     {
         $sets = [];
         $sets[] = 'abcdefghjkmnpqrstuvwxyz';

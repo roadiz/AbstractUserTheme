@@ -10,10 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UserSignedUpEvent extends FilterUserEvent
 {
-    /**
-     * @var FormInterface|null
-     */
-    protected $form;
+    private ?FormInterface $form;
 
     public function __construct(
         UserInterface $user,

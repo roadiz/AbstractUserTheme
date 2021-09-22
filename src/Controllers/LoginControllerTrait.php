@@ -34,7 +34,7 @@ trait LoginControllerTrait
             /** @var OAuth2LinkGenerator $oauth2LinkGenerator */
             $oauth2LinkGenerator = $this->get(OAuth2LinkGenerator::class);
             if ($oauth2LinkGenerator->isSupported($request)) {
-                $this->assignation['openid_button_label'] = $this->get('settingsBag')->get('openid_button_label');
+                $this->assignation['openid_button_label'] = $this->getSettingsBag()->get('openid_button_label');
                 $state = [];
                 $redirectParams = [
                     '_locale' => $_locale,

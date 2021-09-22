@@ -35,7 +35,7 @@ trait LoginRequestControllerTrait
 
         /** @var FormInterface $form */
         $form = $this->createForm(LoginRequestForm::class, null, [
-            'entityManager' => $this->get('em'),
+            'entityManager' => $this->em(),
         ]);
 
         $form->handleRequest($request);
@@ -43,7 +43,7 @@ trait LoginRequestControllerTrait
         if ($form->isSubmitted() && $form->isValid()) {
             if (true === $this->sendConfirmationEmail(
                 $form,
-                $this->get('em'),
+                $this->em(),
                 $this->get('logger'),
                 $this->get('urlGenerator'),
                 'themeResetPassword'
