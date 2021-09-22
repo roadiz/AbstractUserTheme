@@ -35,7 +35,7 @@ trait ChangePasswordControllerTrait
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->get('em')->flush();
+            $this->em()->flush();
             return $this->redirect($this->getRedirectedUrl($_locale));
         }
 

@@ -45,25 +45,23 @@ trait DeleteAccountControllerTrait
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var EventDispatcherInterface $eventDispatcher */
-            $eventDispatcher = $this->get('dispatcher');
             $msg = $this->getTranslator()->trans('user.%name%.deleted_his_account', [
                 '%name%' => $user->getUsername(),
             ]);
-            $eventDispatcher->dispatch(
-                new UserBeforeDeleteEvent($user, $this->get('em'), $this->get('securityTokenStorage'))
+            $this->dispatchEvent(
+                new UserBeforeDeleteEvent($user, $this->em(), $this->get('securityTokenStorage'))
             );
             $this->get('logger')->info($msg);
             if ($user instanceof User) {
-                $this->get('em')->remove($user);
-                $this->get('em')->flush();
+                $this->em()->remove($user);
+                $this->em()->flush();
             }
             $this->get('securityTokenStorage')->setToken(null);
             $request->getSession()->invalidate();
 
-            $eventDispatcher->dispatch(new UserAfterDeleteEvent(
+            $this->dispatchEvent(new UserAfterDeleteEvent(
                 $user,
-                $this->get('em'),
+                $this->em(),
                 $this->get('securityTokenStorage')
             ));
 

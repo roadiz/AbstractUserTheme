@@ -37,22 +37,20 @@ trait LoginResetControllerTrait
         $this->prepareThemeAssignation(null, $this->bindLocaleFromRoute($request, $_locale));
 
         /** @var User|null $user */
-        $user = $this->getUserByToken($this->get('em'), $token);
+        $user = $this->getUserByToken($this->em(), $token);
 
         /** @var FormInterface $form */
         $form = $this->createForm(LoginResetForm::class, null, [
             'token' => $token,
             'confirmationTtl' => User::CONFIRMATION_TTL,
-            'entityManager' => $this->get('em'),
+            'entityManager' => $this->em(),
         ]);
         $form->handleRequest($request);
 
         if (null !== $user && $form->isSubmitted() && $form->isValid()) {
-            if ($this->updateUserPassword($form, $user, $this->get('em'))) {
-                /** @var EventDispatcherInterface $eventDispatcher */
-                $eventDispatcher = $this->get('dispatcher');
-                $eventDispatcher->dispatch(
-                    new UserResetPasswordEvent($user, $this->get('em'), $this->get('securityTokenStorage'))
+            if ($this->updateUserPassword($form, $user, $this->em())) {
+                $this->dispatchEvent(
+                    new UserResetPasswordEvent($user, $this->em(), $this->get('securityTokenStorage'))
                 );
 
                 return $this->redirect($this->getRedirectedUrl($_locale));

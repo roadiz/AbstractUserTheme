@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Themes\AbstractUserTheme\Event;
 
 use Doctrine\ORM\EntityManagerInterface;
-use RZ\Roadiz\Core\Entities\User;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,22 +15,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 abstract class FilterUserEvent extends Event
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
-    /**
-     * @var TokenStorageInterface
-     */
-    protected $tokenStorage;
-    /**
-     * @var UserInterface
-     */
-    private $user;
+    protected EntityManagerInterface $entityManager;
+    protected TokenStorageInterface $tokenStorage;
+    private UserInterface $user;
 
     /**
-     * FilterUserEvent constructor.
-     *
      * @param UserInterface          $user
      * @param EntityManagerInterface $entityManager
      * @param TokenStorageInterface  $tokenStorage
@@ -46,7 +34,7 @@ abstract class FilterUserEvent extends Event
     /**
      * @return UserInterface
      */
-    public function getUser()
+    public function getUser(): UserInterface
     {
         return $this->user;
     }

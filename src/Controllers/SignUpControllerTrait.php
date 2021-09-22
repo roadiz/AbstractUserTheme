@@ -34,8 +34,8 @@ trait SignUpControllerTrait
     {
         return $this->createForm(SignUpType::class, $user, [
             'request' => $request,
-            'publicKey' => $this->get('settingsBag')->get('recaptcha_public_key'),
-            'privateKey' => $this->get('settingsBag')->get('recaptcha_private_key'),
+            'publicKey' => $this->getSettingsBag()->get('recaptcha_public_key'),
+            'privateKey' => $this->getSettingsBag()->get('recaptcha_private_key'),
         ]);
     }
 
@@ -68,14 +68,12 @@ trait SignUpControllerTrait
             if (null !== $user->getEmail()) {
                 $user->setUsername($user->getEmail());
             }
-            $this->get('em')->persist($user);
-            $this->get('em')->flush($user);
+            $this->em()->persist($user);
+            $this->em()->flush($user);
 
-            /** @var EventDispatcherInterface $eventDispatcher */
-            $eventDispatcher = $this->get('dispatcher');
-            $eventDispatcher->dispatch(new UserSignedUpEvent(
+            $this->dispatchEvent(new UserSignedUpEvent(
                 $user,
-                $this->get('em'),
+                $this->em(),
                 $this->get('securityTokenStorage'),
                 $signUpForm
             ));
@@ -112,12 +110,12 @@ trait SignUpControllerTrait
             }
             try {
                 $accountValidator->sendValidationToken($user, $validationToken);
-                $this->get('em')->merge($validationToken);
-                $this->get('em')->flush();
+                $this->em()->merge($validationToken);
+                $this->em()->flush();
                 return $this->redirect($this->getRedirectedValidateUrl($_locale));
             } catch (\Exception $e) {
                 $accountValidator->resetValidationToken($validationToken);
-                $this->get('em')->flush();
+                $this->em()->flush();
                 $signUpForm->addError(new FormError($e->getMessage()));
             }
         }
@@ -126,7 +124,7 @@ trait SignUpControllerTrait
             /** @var OAuth2LinkGenerator $oauth2LinkGenerator */
             $oauth2LinkGenerator = $this->get(OAuth2LinkGenerator::class);
             if ($oauth2LinkGenerator->isSupported($request)) {
-                $this->assignation['openid_button_label'] = $this->get('settingsBag')->get('openid_button_label');
+                $this->assignation['openid_button_label'] = $this->getSettingsBag()->get('openid_button_label');
                 $this->assignation['openid'] = $oauth2LinkGenerator->generate(
                     $request,
                     $this->generateUrl('themeLoginCheck', [

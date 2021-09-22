@@ -65,13 +65,11 @@ trait VerifyValidationTokenControllerTrait
                     $validationToken,
                     $verifyTokenForm->get('token')->getData()
                 );
-                $this->get('em')->flush();
+                $this->em()->flush();
 
-                /** @var EventDispatcherInterface $eventDispatcher */
-                $eventDispatcher = $this->get('dispatcher');
-                $eventDispatcher->dispatch(new UserValidatedEvent(
+                $this->dispatchEvent(new UserValidatedEvent(
                     $user,
-                    $this->get('em'),
+                    $this->em(),
                     $this->get('securityTokenStorage')
                 ));
 

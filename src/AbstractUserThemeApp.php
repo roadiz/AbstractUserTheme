@@ -13,12 +13,12 @@ use Themes\AbstractUserTheme\Security\Authentication\AuthenticationSuccessHandle
 
 class AbstractUserThemeApp extends FrontendController
 {
-    protected static $themeName = 'Abstract User theme';
-    protected static $themeAuthor = 'REZO ZERO';
-    protected static $themeCopyright = 'REZO ZERO';
-    protected static $themeDir = 'AbstractUserTheme';
-    protected static $backendTheme = false;
-    public static $priority = 5;
+    protected static string $themeName = 'Abstract User theme';
+    protected static string $themeAuthor = 'REZO ZERO';
+    protected static string $themeCopyright = 'REZO ZERO';
+    protected static string $themeDir = 'AbstractUserTheme';
+    protected static bool $backendTheme = false;
+    public static int $priority = 5;
 
     /**
      * @var string
@@ -86,7 +86,7 @@ class AbstractUserThemeApp extends FrontendController
      * @return FileLocator
      * @throws \ReflectionException
      */
-    public static function getFileLocator()
+    public static function getFileLocator(): FileLocator
     {
         $abstractResourcesFolder = dirname(__FILE__).'/Resources';
         $resourcesFolder = static::getResourcesFolder();
@@ -106,8 +106,8 @@ class AbstractUserThemeApp extends FrontendController
     protected function getValidationToken(): ?ValidationToken
     {
         $user = $this->getUser();
-        if (null !== $user && $user instanceof User) {
-            return $this->get('em')->getRepository(ValidationToken::class)->findOneByUser($user);
+        if ($user instanceof User) {
+            return $this->em()->getRepository(ValidationToken::class)->findOneByUser($user);
         }
         return null;
     }

@@ -76,12 +76,12 @@ trait VerifyAccountControllerTrait
                 }
                 try {
                     $accountValidator->sendValidationToken($user, $validationToken);
-                    $this->get('em')->merge($validationToken);
-                    $this->get('em')->flush();
+                    $this->em()->merge($validationToken);
+                    $this->em()->flush();
                     return $this->redirect($this->getRedirectedUrl($_locale));
                 } catch (\Exception $e) {
                     $accountValidator->resetValidationToken($validationToken);
-                    $this->get('em')->flush();
+                    $this->em()->flush();
                     $verifyForm->addError(new FormError($e->getMessage()));
                 }
             } else {

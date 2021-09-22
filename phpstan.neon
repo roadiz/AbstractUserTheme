@@ -1,4 +1,9 @@
 parameters:
+    level: max
+    paths:
+        - src
+    ignoreErrors:
+        - '#Call to an undefined method Doctrine\\ORM\\EntityRepository#'
     excludes_analyse:
         - */node_modules/*
         - */bower_components/*
